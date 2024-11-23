@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-blue.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Clickable Slot Location Selection Mockup</title>
+  </head>
+
+  <body>
+    <div style="margin:auto;width:80%;">
+        <h1>Clickable Slot Location Selection Mockup</h1>
+        <p>How the manual location selection / relation creation process could look like, for Modules (child) within a DU (parent).</p>
+        <p>Modeled after the /addpartstree page of the official ProdDB, you can try various (front) DUs here and select the respective modules by clicking them.</p>
+        <p>Each SU is oriented in such a way that when looking at its face, the module connectors are at the top (or on the right), and module capacitors are on the bottom (or on the left).</p>
+        <div id="content">
+            <div id="fields">
+                <label for="parentNameIn">Parent name:</label>
+                <input id="parentNameIn" name="parentName-input" oninput="showClickable()" value="Parent name" type="text" />
+                <br><br>
+                <label for="parentSNIn">Parent SN:</label>
+                <input id="parentSNIn" name="parentSN-input" oninput="showClickable()" value="Parent SN" type="text" />
+                <br><br>
+                <label for="childNameIn">Child name:</label>
+                <input id="childNameIn" name="childName-input" oninput="showClickable()" value="Child name" type="text" />
+                <br><br>
+                <label for="childSNIn">Child SN:</label>
+                <input id="childSNIn" name="childSN-input" oninput="showClickable()" value="Child SN" type="text" />
+                <br><br>
+                <label for="positionOut">Position:</label>
+                <output id="positionOut" name="position-output" style="background-color:#EEE"> Waiting for user input </output>
+                <br><br>
+                <button type="button" id="addBut">ADD PARTS TREE</button>
+            </div>
+            <div id="clickable">
+                <canvas id="duCanvas" width=600 height=600></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

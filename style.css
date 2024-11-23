@@ -1,0 +1,15 @@
+#content {
+  display: flex;
+}
+
+#fields {
+  flex: 0 0 40%;
+}
+
+#clickable {
+  flex: 1;
+}
+
+#duCanvas {
+    border: 1px solid #555;
+}

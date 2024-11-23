@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-blue.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Module Quality Flag Mockup</title>
+  </head>
+
+  <body>
+    <div style="margin:auto;width:80%;">
+        <h1>Module Quality Flag Mockup</h1>
+        <p>Ideally, the ASIC data is retrieved from the two ASICs connected to that module. Here I just put them as user input for demonstration.</p>
+        <p>The number of noisy pixels or a different flag should ideally be retieved from measurements done with this module, however, this is for the future and now again it is a manual insertion of the user.</p>
+        <p>Same goes for metrology and can load, if there is an objective way of retrieving such a summary flag from the measurements table, one could take that. Now, selected by the user from a dropdown.</p>
+        <p>Once it is clear how to get those flags from the raw data, no need to store the flags separately in the database. Right now, one would store them as different options because it's still a manual insertion.</p>
+        <script src="script.js"></script>
+        <label for="ASIC0works-select">ASIC 0 works</label>
+        <select name="ASIC0works" id="ASIC0works-select" onchange="calcOverall()">
+          <option value="yes">Yes</option>
+          <option value="almost">Almost (1 col masked)</option>
+          <option value="no-noisy">No (noisy)</option>
+          <option value="no-unknown">No (unknown why)</option>
+          <option value="no">No</option>
+        </select>
+
+        <label for="ASIC1works-select">ASIC 1 works</label>
+        <select name="ASIC1works" id="ASIC1works-select" onchange="calcOverall()">
+          <option value="yes" selected>Yes</option>
+          <option value="almost">Almost (1 col masked)</option>
+          <option value="no-noisy">No (noisy)</option>
+          <option value="no-unknown">No (unknown why)</option>
+          <option value="no">No</option>
+        </select>
+
+        <br><br>
+
+        <label for="ASIC0discnoisypixels-select">ASIC 0 disc.+noisy pixels</label>
+        <select name="ASIC0discnoisypixels" id="ASIC0discnoisypixels-select" onchange="calcOverall()">
+          <option value="unknown" selected>??</option>
+          <option value="custom">Insert custom value</option>
+          <option value="n-a_canttune">n/a (can't tune)</option>
+          <option value="n-a">n/a</option>
+          <option value="many">Many</option>
+        </select>
+        <div id="ASIC0discnoisypixels-custom-block" style="display:none;">
+            <label for="ASIC0discnoisypixels-custom">Custom value:</label>
+            <input id="ASIC0discnoisypixels-custom" name="ASIC0discnoisypixels-value" oninput="calcOverall()" value="0" type="text" />
+        </div>
+        <label for="ASIC1discnoisypixels-select">ASIC 1 disc.+noisy pixels</label>
+        <select name="ASIC1discnoisypixels" id="ASIC1discnoisypixels-select" onchange="calcOverall()">
+            <option value="unknown" selected>??</option>
+            <option value="custom">insert custom value</option>
+            <option value="n-a_canttune">n/a (can't tune)</option>
+            <option value="n-a">n/a</option>
+            <option value="many">many</option>
+        </select>
+        <div id="ASIC1discnoisypixels-custom-block" style="display:none;">
+            <label for="ASIC1discnoisypixels-custom">Custom value:</label>
+            <input id="ASIC1discnoisypixels-custom" name="ASIC1discnoisypixels-value" oninput="calcOverall()" value="0" type="text" />
+        </div>
+
+        <br><br>
+
+        <label for="metrology-select">Metrology</label>
+        <select name="metrology" id="metrology-select" onchange="calcOverall()">
+          <option value="ok" selected>OK</option>
+          <option value="bad">Bad</option>
+        </select>
+
+        <label for="canload-select">Can load?</label>
+        <select name="canload" id="canload-select" onchange="calcOverall()">
+          <option value="yes" selected>Yes</option>
+          <option value="no">No</option>
+        </select>
+
+        <br><br>
+
+        <p>The overall score at the end is the logical and of all good options above, and could be either calculated on-the-fly for the frontend only (e.g. with javascript), or also stored in the database and retrieved from there.</p>
+        <label for="overall-score">Overall good?</label>
+        <output id="overall-score" name="overall-score" style="background-color:#EEE"> Waiting for user input </output>
+    </div>
+  </body>
+</html>
