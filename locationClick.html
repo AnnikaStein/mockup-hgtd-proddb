@@ -39,8 +39,21 @@
                 <canvas id="duCanvas" width=600 height=600></canvas>
             </div>
         </div>
+        <p>Already stored relations:</p>
+        <output id="relations_DU_MODULE">
+        </output>
+        <hr>
+        <p>Use this input to specify a slot table csv.</p>
+        <input type="file" id="csvFileInput" onchange="handleFiles(this.files)" accept=".csv"><br>
+        <!--<input id="csv" type="file"><br>-->
+        <p>Known slots:</p>
+        <output id="csvOut">
+        </output>
     </div>
-
+    <!--<script src="jquery-csv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>-->
+    <script type="text/javascript" src="read-csv.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

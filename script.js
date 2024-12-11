@@ -160,6 +160,34 @@ console.log("Number of implemented Modules: " + totalNModules);
 
 var displayedDUtype = "None";
 
+function setDPI(canvas, dpi) {
+    // Set up CSS size.
+    canvas.style.width = canvas.style.width || canvas.width + 'px';
+    canvas.style.height = canvas.style.height || canvas.height + 'px';
+
+    // Get size information.
+    var scaleFactor = dpi / 96;
+    var width = parseFloat(canvas.style.width);
+    var height = parseFloat(canvas.style.height);
+
+    // Backup the canvas contents.
+    var oldScale = canvas.width / width;
+    var backupScale = scaleFactor / oldScale;
+    var backup = canvas.cloneNode(false);
+    backup.getContext('2d').drawImage(canvas, 0, 0);
+
+    // Resize the canvas.
+    var ctx = canvas.getContext('2d');
+    canvas.width = Math.ceil(width * scaleFactor);
+    canvas.height = Math.ceil(height * scaleFactor);
+
+    // Redraw the canvas image and scale future draws.
+    ctx.setTransform(backupScale, 0, 0, backupScale, 0, 0);
+    ctx.drawImage(backup, 0, 0);
+    ctx.setTransform(scaleFactor, 0, 0, scaleFactor, 0, 0);
+}
+
+
 function roundedRect(ctx, x, y, width, height, radius = 5) {
   ctx.beginPath();
   ctx.moveTo(x, y + radius);
@@ -201,6 +229,7 @@ var wait = (ms) => {
 }
 
 const canv = document.getElementById("duCanvas");
+setDPI(canv, dpi=300)
 canv.addEventListener('mousedown', function(e) {
     const [mouseX, mouseY] = getCursorPosition(canv, e);
     if (displayedDUtype != "None") {
@@ -229,9 +258,34 @@ canv.addEventListener('mousedown', function(e) {
     }
 })
 
+var relations_DU_MODULE = [];
+const loadingStatusPerDU = Object.keys(allDUs).reduce((obj, x) => Object.assign(obj, { [x]: 0 }), {});
+console.log(loadingStatusPerDU);
+
 const addBut = document.getElementById("addBut");
 addBut.addEventListener('click', function(e) {
-    alert("Mockup only, this button has no effect here!");
+    //alert("Mockup only, this button has no effect here!");
+    var parentNameIn = document.getElementById("parentNameIn").value;
+    var parentSNIn = document.getElementById("parentSNIn").value;
+    var childNameIn = document.getElementById("childNameIn").value;
+    var childSNIn = document.getElementById("childSNIn").value;
+    var positionOut = document.getElementById("positionOut").value;
+    relations_DU_MODULE.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionOut]);
+    document.getElementById('relations_DU_MODULE').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionOut + "<br />";
+    for (const key of Object.keys(allDUs)) {
+        console.log(key);
+        if (parentSNIn.includes(key)) {
+            displayedDUtype = key;
+            loadingStatusPerDU[displayedDUtype] += 1;
+            console.log(displayedDUtype);
+            console.log(loadingStatusPerDU[displayedDUtype]);
+            break;
+        }
+    }
+    if (allDUs[displayedDUtype].length == loadingStatusPerDU[displayedDUtype]) {
+        console.log("Congrats, you loaded a full DU!");
+        alert("Congrats, you loaded a full DU!");
+    }
 })
 
 function showClickable() {
@@ -246,7 +300,6 @@ function showClickable() {
 
     var canvas = document.getElementById("duCanvas");
 
-    //if (true) {
     if (parentNameIn.value == 'DU' && childNameIn.value == 'Module') {
         positionOut.value = ' Implemented ';
         const ctx = canvas.getContext("2d");
@@ -254,7 +307,6 @@ function showClickable() {
         // the SU itself
         ctx.fillStyle = "#f4f4bb";
 
-        //if (true) {
         for (const key of Object.keys(allDUs)) {
             if (parentSNIn.value.includes(key)) {
                 displayedDUtype = key;
@@ -294,6 +346,24 @@ function showClickable() {
         positionOut.value = ' Type in manually ';
     }
 }
+
+
+
+
+// var fileInput = document.getElementById("csv"),
+//
+//     readFile = function () {
+//         var reader = new FileReader();
+//         reader.onload = function () {
+//             document.getElementById('csvOut').innerHTML = reader.result;
+//         };
+//         // start reading the file. When it is done, calls the onload event defined above.
+//         reader.readAsText(fileInput.files[0]);
+//     };
+//
+// fileInput.addEventListener('change', readFile);
+
+
 function calcOverall() {
     var selectASIC0works = document.getElementById("ASIC0works-select");
     var selectASIC1works = document.getElementById("ASIC1works-select");
