@@ -258,7 +258,12 @@ canv.addEventListener('mousedown', function(e) {
     }
 })
 
+var slotLines = []; // read in later via csv file, will be available for relations
+var slotObjects = {'VA:L0:Q0:R1:M18' : []};
+
 var relations_DU_MODULE = [];
+var relations_DETECTOR_DU = [];
+var relations_SLOT_MODULE = [];
 const loadingStatusPerDU = Object.keys(allDUs).reduce((obj, x) => Object.assign(obj, { [x]: 0 }), {});
 console.log(loadingStatusPerDU);
 
@@ -270,22 +275,79 @@ addBut.addEventListener('click', function(e) {
     var childNameIn = document.getElementById("childNameIn").value;
     var childSNIn = document.getElementById("childSNIn").value;
     var positionOut = document.getElementById("positionOut").value;
-    relations_DU_MODULE.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionOut]);
-    document.getElementById('relations_DU_MODULE').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionOut + "<br />";
-    for (const key of Object.keys(allDUs)) {
-        console.log(key);
-        if (parentSNIn.includes(key)) {
-            displayedDUtype = key;
-            loadingStatusPerDU[displayedDUtype] += 1;
-            console.log(displayedDUtype);
-            console.log(loadingStatusPerDU[displayedDUtype]);
-            break;
+    var positionDetDU = document.getElementById("positionDetDU").value;
+
+    if (parentNameIn == "DU" && childNameIn == "Module") {
+        relations_DU_MODULE.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionOut]);
+        document.getElementById('relations_DU_MODULE').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionOut + "<br />";
+
+        for (const key of Object.keys(allDUs)) {
+            console.log(key);
+            if (parentSNIn.includes(key)) {
+                displayedDUtype = key;
+                loadingStatusPerDU[displayedDUtype] += 1;
+                console.log(displayedDUtype);
+                console.log(loadingStatusPerDU[displayedDUtype]);
+                break;
+            }
+        }
+        if (allDUs[displayedDUtype].length == loadingStatusPerDU[displayedDUtype]) {
+            console.log("Congrats, you loaded a full DU!");
+            alert("Congrats, you loaded a full DU!");
+        }
+    } else if (parentNameIn == "Detector" && childNameIn == "DU") {
+        relations_DETECTOR_DU.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionDetDU]);
+        var attribute_Vessel = positionDetDU.split('V').pop().split('L')[0];
+        var attribute_Layer = positionDetDU.split('L').pop().split('Q')[0];
+        var attribute_Quadrant = positionDetDU.split('Q').pop();
+
+        //console.log(attribute_Vessel);
+        //console.log(attribute_Layer);
+        //console.log(attribute_Quadrant);
+
+        document.getElementById('relations_DETECTOR_DU').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionDetDU + "<br />";
+        // find all existing relations between this DU and its Modules
+        var this_DU_relations_MODULE = [];
+
+        for (const key of Object.keys(allDUs)) {
+            if (childSNIn.includes(key)) {
+                var attribute_SU_type = key;
+                break;
+            }
+        }
+        //console.log(Object.keys(slotObjects));
+        //console.log(slotObjects);
+        for (const entry of relations_DU_MODULE) {
+            if (entry[1] == childSNIn) {
+                // found an entry that contains this DU as a parent
+                this_DU_relations_MODULE.push(entry);
+                var attribute_SU_r = entry[4].split('R').pop().split('M')[0];
+                var attribute_SU_m = entry[4].split('M').pop();
+                //console.log(attribute_SU_r);
+                //console.log(attribute_SU_m);
+
+                //console.log(slotObjects);
+                // search in slot table!
+
+                for (const sl of Object.keys(slotObjects)) {
+                    //console.log(sl);
+                    var s = slotObjects[sl];
+                    //console.log(slotObjects[sl]);
+                    if (s[0] == attribute_Vessel && s[1] == attribute_Layer && s[3] == attribute_Quadrant && s[9] == attribute_SU_type && s[10] == attribute_SU_r && s[11] == attribute_SU_m) {
+                        // this is the slot!
+                        //var slot_SN = sl[0];
+                        //console.log(s);
+                        var slot_SN = sl;
+                        relations_SLOT_MODULE.push(['Slot', slot_SN, 'Module', entry[3],'']);
+                        document.getElementById('relations_SLOT_MODULE').innerHTML += "Slot, " + slot_SN + ", " + "Module, " + entry[3] + ", " + "<br />";
+                    }
+                }
+                //console.log(slot_SN);
+                //var slot_SN = `V${attribute_Vessel}:L${attribute_Layer}:Q${attribute_Quadrant}:R:M`;
+            }
         }
     }
-    if (allDUs[displayedDUtype].length == loadingStatusPerDU[displayedDUtype]) {
-        console.log("Congrats, you loaded a full DU!");
-        alert("Congrats, you loaded a full DU!");
-    }
+
 })
 
 function showClickable() {
@@ -348,6 +410,87 @@ function showClickable() {
 }
 
 
+function handleFiles(files) {
+	// Check for the various File API support.
+	if (window.FileReader) {
+		// FileReader are supported.
+		getAsText(files[0]);
+	} else {
+		alert('FileReader are not supported in this browser.');
+	}
+}
+
+function getAsText(fileToRead) {
+	var reader = new FileReader();
+	// Handle errors load
+	reader.onload = loadHandler;
+	reader.onerror = errorHandler;
+	// Read file into memory as UTF-8
+	reader.readAsText(fileToRead);
+}
+
+function loadHandler(event) {
+	var csv = event.target.result;
+	processData(csv);
+}
+
+function processData(csv) {
+    var allTextLines = csv.split(/\r\n|\n/);
+    while (allTextLines.length) {
+        slotLines.push(allTextLines.shift().split(','));
+    }
+	//console.log(slotLines);
+	drawOutput(slotLines);
+}
+
+function drawOutput(lines){
+	//Clear previous data
+	document.getElementById("csvOut").innerHTML = "";
+	var table = document.createElement("table");
+	for (var i = 0; i < lines.length; i++) {
+		var row = table.insertRow(-1);
+        if (i != 0) {
+            if (lines[i][0].length > 0) {
+                //console.log(lines[i][0]);
+                //console.log(lines[i].slice(1, lines[i].length));
+                slotObjects[lines[i][0]] = lines[i].slice(1, lines[i].length);
+            }
+        }
+		for (var j = 0; j < lines[i].length; j++) {
+			var firstNameCell = row.insertCell(-1);
+			firstNameCell.appendChild(document.createTextNode(lines[i][j]));
+		}
+	}
+	document.getElementById("csvOut").appendChild(table);
+    //console.log(Object.keys(slotObjects));
+    //console.log(slotObjects);
+}
+
+//if your csv file contains the column names as the first line
+// function processDataAsObj(csv){
+//     var allTextLines = csv.split(/\r\n|\n/);
+//     var lines = [];
+//
+//     //first line of csv
+//     var keys = allTextLines.shift().split(',');
+//
+//     while (allTextLines.length) {
+//         var arr = allTextLines.shift().split(',');
+//         var obj = {};
+//         for(var i = 0; i < keys.length; i++){
+//             obj[keys[i]] = arr[i];
+// 	}
+//         lines.push(obj);
+//     }
+//         console.log(lines);
+// 	drawOutputAsObj(lines);
+// }
+
+function errorHandler(evt) {
+	if(evt.target.error.name == "NotReadableError") {
+		alert("Canno't read file !");
+	}
+}
 
 
 // var fileInput = document.getElementById("csv"),
