@@ -269,7 +269,6 @@ console.log(loadingStatusPerDU);
 
 const addBut = document.getElementById("addBut");
 addBut.addEventListener('click', function(e) {
-    //alert("Mockup only, this button has no effect here!");
     var parentNameIn = document.getElementById("parentNameIn").value;
     var parentSNIn = document.getElementById("parentSNIn").value;
     var childNameIn = document.getElementById("childNameIn").value;
@@ -278,6 +277,7 @@ addBut.addEventListener('click', function(e) {
     var positionDetDU = document.getElementById("positionDetDU").value;
 
     if (parentNameIn == "DU" && childNameIn == "Module") {
+        // in real life for the production DB, need to add the relation to the SQL here
         relations_DU_MODULE.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionOut]);
         document.getElementById('relations_DU_MODULE').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionOut + "<br />";
 
@@ -292,8 +292,21 @@ addBut.addEventListener('click', function(e) {
             }
         }
         if (allDUs[displayedDUtype].length == loadingStatusPerDU[displayedDUtype]) {
-            console.log("Congrats, you loaded a full DU!");
-            alert("Congrats, you loaded a full DU!");
+            var filledPositionsThisDU = [];
+            for (const entry of relations_DU_MODULE) {
+                if (entry[1] == parentSNIn) {
+                    filledPositionsThisDU.push(entry[4]);
+                }
+            }
+            let uniquePositionsThisDU = [...new Set(filledPositionsThisDU)];
+            if (uniquePositionsThisDU.length == allDUs[displayedDUtype].length) {
+                console.log("Congrats, you loaded a full DU!");
+                alert("Congrats, you loaded a full DU!");
+            } else {
+                console.log("The DU is equipped with sufficient modules, but you must have made a mistake in filling them into unique positions!");
+                alert("The DU is equipped with sufficient modules, but you must have made a mistake in filling them into unique positions!");
+            }
+
         }
     } else if (parentNameIn == "Detector" && childNameIn == "DU") {
         relations_DETECTOR_DU.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionDetDU]);
@@ -301,10 +314,7 @@ addBut.addEventListener('click', function(e) {
         var attribute_Layer = positionDetDU.split('L').pop().split('Q')[0];
         var attribute_Quadrant = positionDetDU.split('Q').pop();
 
-        //console.log(attribute_Vessel);
-        //console.log(attribute_Layer);
-        //console.log(attribute_Quadrant);
-
+        // in real life for the production DB, need to add the relation to the SQL here
         document.getElementById('relations_DETECTOR_DU').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionDetDU + "<br />";
         // find all existing relations between this DU and its Modules
         var this_DU_relations_MODULE = [];
@@ -315,35 +325,26 @@ addBut.addEventListener('click', function(e) {
                 break;
             }
         }
-        //console.log(Object.keys(slotObjects));
-        //console.log(slotObjects);
+
         for (const entry of relations_DU_MODULE) {
             if (entry[1] == childSNIn) {
                 // found an entry that contains this DU as a parent
                 this_DU_relations_MODULE.push(entry);
                 var attribute_SU_r = entry[4].split('R').pop().split('M')[0];
                 var attribute_SU_m = entry[4].split('M').pop();
-                //console.log(attribute_SU_r);
-                //console.log(attribute_SU_m);
 
-                //console.log(slotObjects);
                 // search in slot table!
-
                 for (const sl of Object.keys(slotObjects)) {
-                    //console.log(sl);
                     var s = slotObjects[sl];
-                    //console.log(slotObjects[sl]);
                     if (s[0] == attribute_Vessel && s[1] == attribute_Layer && s[3] == attribute_Quadrant && s[9] == attribute_SU_type && s[10] == attribute_SU_r && s[11] == attribute_SU_m) {
                         // this is the slot!
-                        //var slot_SN = sl[0];
-                        //console.log(s);
                         var slot_SN = sl;
+
+                        // in real life for the production DB, need to add the relation to the SQL here
                         relations_SLOT_MODULE.push(['Slot', slot_SN, 'Module', entry[3],'']);
                         document.getElementById('relations_SLOT_MODULE').innerHTML += "Slot, " + slot_SN + ", " + "Module, " + entry[3] + ", " + "<br />";
                     }
                 }
-                //console.log(slot_SN);
-                //var slot_SN = `V${attribute_Vessel}:L${attribute_Layer}:Q${attribute_Quadrant}:R:M`;
             }
         }
     }
@@ -439,7 +440,6 @@ function processData(csv) {
     while (allTextLines.length) {
         slotLines.push(allTextLines.shift().split(','));
     }
-	//console.log(slotLines);
 	drawOutput(slotLines);
 }
 
@@ -451,8 +451,6 @@ function drawOutput(lines){
 		var row = table.insertRow(-1);
         if (i != 0) {
             if (lines[i][0].length > 0) {
-                //console.log(lines[i][0]);
-                //console.log(lines[i].slice(1, lines[i].length));
                 slotObjects[lines[i][0]] = lines[i].slice(1, lines[i].length);
             }
         }
@@ -462,49 +460,13 @@ function drawOutput(lines){
 		}
 	}
 	document.getElementById("csvOut").appendChild(table);
-    //console.log(Object.keys(slotObjects));
-    //console.log(slotObjects);
 }
-
-//if your csv file contains the column names as the first line
-// function processDataAsObj(csv){
-//     var allTextLines = csv.split(/\r\n|\n/);
-//     var lines = [];
-//
-//     //first line of csv
-//     var keys = allTextLines.shift().split(',');
-//
-//     while (allTextLines.length) {
-//         var arr = allTextLines.shift().split(',');
-//         var obj = {};
-//         for(var i = 0; i < keys.length; i++){
-//             obj[keys[i]] = arr[i];
-// 	}
-//         lines.push(obj);
-//     }
-//         console.log(lines);
-// 	drawOutputAsObj(lines);
-// }
 
 function errorHandler(evt) {
 	if(evt.target.error.name == "NotReadableError") {
 		alert("Canno't read file !");
 	}
 }
-
-
-// var fileInput = document.getElementById("csv"),
-//
-//     readFile = function () {
-//         var reader = new FileReader();
-//         reader.onload = function () {
-//             document.getElementById('csvOut').innerHTML = reader.result;
-//         };
-//         // start reading the file. When it is done, calls the onload event defined above.
-//         reader.readAsText(fileInput.files[0]);
-//     };
-//
-// fileInput.addEventListener('change', readFile);
 
 
 function calcOverall() {
