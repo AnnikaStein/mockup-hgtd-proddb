@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-blue.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Serial Number Decoding / Encoding Mockup</title>
+  </head>
+
+  <body>
+    <div style="margin:auto;width:80%;">
+        <h1>Serial Number Decoding / Encoding Mockup</h1>
+        <script src="SNscript.js"></script>
+        <p>Serial numbers for HGTD are documented in <a href="https://cds.cern.ch/record/2910370/files/ATL-COM-HGTD-2024-026.pdf" target="_blank">an internal note</a>.</p>
+        <p><em><span style="color:red;">If you want to decode:</span></em> Just type in the serial number. You receive the corresponding fields and, if applicable, a note on the validity of the serial number. For regular parts, use the ATLAS convention with 14 digits like 20WXXYYYYYYYYY (XX: for component type, remaining Y: individual per component). For properties that have a human-readable explainer comment, this will be written in parenthesis. For slots, the pattern must match Vx:Lx:Qx:Rx:Mx (replace the x).</p>
+        <p><em><span style="color:red;">If you want to encode:</span></em> Specify the part and corresponding properties that are used to build the SN.</p>
+
+        <h2>Decode (SN known, properties unknown)</h2>
+
+        <label for="snIn">Serial number:</label>
+        <input id="snIn" name="snIn-input" oninput="getPropertiesFromSN()" value="Serial number" type="text" />
+        <br><br>
+        <output id="messageOut">
+        </output>
+        <br><br>
+        <output id="propertiesOut">
+        </output>
+        <hr>
+
+        <h2>Encode (properties known, SN unknown)</h2>
+
+        <label for="kopIn">Kind of part:</label>
+        <select name="kopIn" id="kopIn-select" onchange="getSNFromProperties()">
+            <option value="FT" selected>FT</option>
+            <option value="DU">DU</option>
+            <option value="SU">SU</option>
+            <option value="Module">Module</option>
+            <option value="Slot">Slot</option>
+            <option value="MF">ModuleFlex</option>
+            <option value="PEB">PEB</option>
+            <option value="Glue">Glue</option>
+            <option value="Wafer">Wafer</option>
+            <option value="Sensor">Sensor</option>
+            <option value="ASIC">ASIC</option>
+            <option value="Hybrid">Hybrid</option>
+        </select>
+        <br><br>
+        <output id="snOut">
+        </output>
+        <hr>
+
+
+
+    </div>
+  </body>
+</html>
