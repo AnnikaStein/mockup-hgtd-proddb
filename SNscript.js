@@ -20,7 +20,8 @@ function getPropertiesFromSN() {
             lengthMessageOut.value = '';
         }
         // check for Sensor (sensor is special, it has only one digit for its component type)
-        if (snIn[3] == 'S') {
+        // first make sure to not get a Support Unit (SU) which also starts with S
+        if ((snIn[3] == 'S') && (snIn[4] != 'U')) {
             // either Sensor or Sensor Wafer
             if (snIn[4] == '0') {
                 // Wafer
@@ -283,26 +284,255 @@ function getPropertiesFromSN() {
             }
         } else if (snIn[3] == 'A' && snIn[4] == 'S') {
             messageOut.value = 'Attempting to decode ASIC SN';
+            try {
+                var tests = snIn[5];
+                if (tests == 'H') {
+                    var testsExplainer = 'IHEP';
+                } else if (tests == 'J') {
+                    var testsExplainer = 'IJCLab';
+                } else {
+                    var testsExplainer = 'Unknown Assembly site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var waferID = `${snIn[7]}${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
+                var waferNr = `${snIn[7]}${snIn[8]}${snIn[9]}${snIn[10]}`;
+                var chipID = `${snIn[11]}${snIn[12]}${snIn[13]}`;
 
+                propertiesOut.value = `Test site: ${tests} (${testsExplainer}), Production: ${prod} (${prodExplainer}), Wafer_ID: ${waferID}, Wafer_Nr: ${waferNr}, Chip_ID: ${chipID}`
+                messageOut.value = 'Successfully decoded ASIC SN';
+            } catch {
+                messageOut.value = 'Failed to decode ASIC SN, check if you used this pattern: 20WASVPDDDDCCC';
+            }
         } else if (snIn[3] == 'M' && snIn[4] == 'F') {
             messageOut.value = 'Attempting to decode Module Flex SN';
+            try {
+                var manu = snIn[5];
+                if (manu == 'H') {
+                    var manuExplainer = 'IHEP';
+                } else {
+                    var manuExplainer = 'Unknown Assembly site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var batchn = `${snIn[7]}`;
+                var grounding = `${snIn[8]}`;
+                var counter = `${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
+                propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Grounding scheme: ${grounding}, Counter: ${counter}`
+                messageOut.value = 'Successfully decoded Module Flex SN';
+            } catch {
+                messageOut.value = 'Failed to decode Module Flex SN, check if you used this pattern: 20WMFMPBJNNNNN';
+            }
         } else if (snIn[3] == 'S' && snIn[4] == 'U') {
             messageOut.value = 'Attempting to decode Support Unit SN';
+            try {
+                var manu = snIn[5];
+                if (manu == 'H') {
+                    var manuExplainer = 'IHEP';
+                } else {
+                    var manuExplainer = 'Unknown Assembly site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var side = `${snIn[7]}`;
+                if (side == 'F') {
+                    var sideExplainer = 'front';
+                } else if (side == 'B') {
+                    var sideExplainer = 'back';
+                } else {
+                    var sideExplainer = 'Unknown Side of HGTD disk attribute!';
+                }
+                var ring = `${snIn[8]}`;
+                if (ring == 'I') {
+                    var ringExplainer = 'inner';
+                } else if (ring == 'M') {
+                    var ringExplainer = 'middle';
+                } else if (ring == 'O') {
+                    var ringExplainer = 'outer';
+                } else {
+                    var ringExplainer = 'Unknown Ring attribute!';
+                }
+                var type = `${snIn[9]}${snIn[10]}`;
+                var counter = `${snIn[11]}${snIn[12]}${snIn[13]}`;
 
+                propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Side of HGTD disk: ${side} (${sideExplainer}), Ring: ${ring} (${ringExplainer}), Type: ${type}, Counter: ${counter}`
+                messageOut.value = 'Successfully decoded Support Unit SN';
+            } catch {
+                messageOut.value = 'Failed to decode Support Unit SN, check if you used this pattern: 20WSUMPZRTTNNN';
+            }
         } else if (snIn[3] == 'D' && snIn[4] == 'U') {
             messageOut.value = 'Attempting to decode Detector Unit SN';
+            try {
+                var manu = snIn[5];
+                if ((manu == 'K') || (manu == '1')) {
+                    var manuExplainer = 'IFAE';
+                } else if ((manu == 'H') || (manu == '2')) {
+                    var manuExplainer = 'IHEP';
+                } else if ((manu == 'J') || (manu == '3')) {
+                    var manuExplainer = 'IJCLab';
+                } else if ((manu == 'M') || (manu == '4')) {
+                    var manuExplainer = 'Mainz';
+                } else if ((manu == 'A') || (manu == '5')) {
+                    var manuExplainer = 'MAScIR';
+                } else if ((manu == 'U') || (manu == '6')) {
+                    var manuExplainer = 'USTC';
+                } else {
+                    var manuExplainer = 'Unknown Site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var side = `${snIn[7]}`;
+                if (side == 'F') {
+                    var sideExplainer = 'front';
+                } else if (side == 'B') {
+                    var sideExplainer = 'back';
+                } else {
+                    var sideExplainer = 'Unknown Side of HGTD disk attribute!';
+                }
+                var ring = `${snIn[8]}`;
+                if (ring == 'I') {
+                    var ringExplainer = 'inner';
+                } else if (ring == 'M') {
+                    var ringExplainer = 'middle';
+                } else if (ring == 'O') {
+                    var ringExplainer = 'outer';
+                } else {
+                    var ringExplainer = 'Unknown Ring attribute!';
+                }
+                var type = `${snIn[9]}${snIn[10]}`;
+                var counter = `${snIn[11]}${snIn[12]}${snIn[13]}`;
 
+                propertiesOut.value = `Sites that install modules on SU: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Side of HGTD disk: ${side} (${sideExplainer}), Ring: ${ring} (${ringExplainer}), Type: ${type}, Counter: ${counter}`
+                messageOut.value = 'Successfully decoded Detector Unit SN';
+            } catch {
+                messageOut.value = 'Failed to decode Detector Unit SN, check if you used this pattern: 20WDUKPZRTTNNN';
+            }
         } else if (snIn[3] == 'G' && snIn[4] == 'L') {
             messageOut.value = 'Attempting to decode Glue SN';
+            try {
+                var manu = snIn[5];
+                if ((manu == 'K') || (manu == '1')) {
+                    var manuExplainer = 'IFAE';
+                } else if ((manu == 'H') || (manu == '2')) {
+                    var manuExplainer = 'IHEP';
+                } else if ((manu == 'J') || (manu == '3')) {
+                    var manuExplainer = 'IJCLab';
+                } else if ((manu == 'M') || (manu == '4')) {
+                    var manuExplainer = 'Mainz';
+                } else if ((manu == 'A') || (manu == '5')) {
+                    var manuExplainer = 'MAScIR';
+                } else if ((manu == 'U') || (manu == '6')) {
+                    var manuExplainer = 'USTC';
+                } else {
+                    var manuExplainer = 'Unknown Site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var counter = `${snIn[7]}${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
+                propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Counter: ${counter}`
+                messageOut.value = 'Successfully decoded Glue SN';
+            } catch {
+                messageOut.value = 'Failed to decode Glue SN, check if you used this pattern: 20WGLMPNNNNNNN';
+            }
         } else if (snIn[3] == 'P' && snIn[4] == 'E') {
             messageOut.value = 'Attempting to decode PEB SN';
+            try {
+                var manu = snIn[5];
+                if (manu == 'H') {
+                    var manuExplainer = 'IHEP';
+                } else if (manu == 'N') {
+                    var manuExplainer = 'NJU';
+                } else {
+                    var manuExplainer = 'Unknown Manufacturer / Vendor attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var batchn = `${snIn[7]}`;
+                var grounding = `${snIn[8]}`;
+                var counter = `${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
+                propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Grounding scheme: ${grounding}, Counter: ${counter}`
+                messageOut.value = 'Successfully decoded PEB SN';
+            } catch {
+                messageOut.value = 'Failed to decode PEB SN, check if you used this pattern: 20WPEMPBJNNNNN';
+            }
         } else {
             messageOut.value = 'Invalid or incomplete Serial Number';
         }
-
     } else if (snIn[0] == 'V') {
         messageOut.value = 'Attempting to decode Slot SN';
         //if (snIn.includes('V') && snIn.includes('L')
