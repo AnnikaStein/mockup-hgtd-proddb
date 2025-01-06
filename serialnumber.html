@@ -14,15 +14,23 @@
     <div style="margin:auto;width:80%;">
         <h1>Serial Number Decoding / Encoding Mockup</h1>
         <script src="SNscript.js"></script>
-        <p>Serial numbers for HGTD are documented in <a href="https://cds.cern.ch/record/2910370/files/ATL-COM-HGTD-2024-026.pdf" target="_blank">an internal note</a>.</p>
-        <p><em><span style="color:red;">If you want to decode:</span></em> Just type in the serial number. You receive the corresponding fields and, if applicable, a note on the validity of the serial number. For regular parts, use the ATLAS convention with 14 digits like 20WXXYYYYYYYYY (XX: for component type, remaining Y: individual per component). For properties that have a human-readable explainer comment, this will be written in parenthesis. For slots, the pattern must match Vx:Lx:Qx:Rx:Mx (replace the x).</p>
-        <p><em><span style="color:red;">If you want to encode:</span></em> Specify the part and corresponding properties that are used to build the SN.</p>
+        <p>Serial numbers for HGTD are documented in
+            <a href="https://cds.cern.ch/record/2910370/files/ATL-COM-HGTD-2024-026.pdf" target="_blank">an internal note</a>.</p>
+        <p><em><span style="color:red;">If you want to decode:</span></em> Just type in the serial number.
+            You receive the corresponding fields and, if applicable, a note on the validity of the serial number.
+            For regular parts, use the ATLAS convention with 14 digits like 20WXXYYYYYYYYY (XX: for component type,
+            remaining Y: individual per component). For properties that have a human-readable explainer comment,
+            this will be written in parenthesis. For slots, the pattern must match Vx:Lx:Qx:Rx:Mx (replace the x).</p>
+        <p><em><span style="color:red;">If you want to encode:</span></em> Specify the part and corresponding properties
+            that are used to build the SN.</p>
 
         <h2>Decode (SN known, properties unknown)</h2>
 
         <label for="snIn">Serial number:</label>
         <input id="snIn" name="snIn-input" oninput="getPropertiesFromSN()" value="Serial number" type="text" />
         <br><br>
+        <output id="lengthMessageOut">
+        </output>
         <output id="messageOut">
         </output>
         <br><br>

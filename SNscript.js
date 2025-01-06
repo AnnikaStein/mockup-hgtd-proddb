@@ -3,12 +3,22 @@ kopStr = {}
 function getPropertiesFromSN() {
     var snIn = document.getElementById("snIn").value;
     var messageOut = document.getElementById("messageOut");
+    var lengthMessageOut = document.getElementById("lengthMessageOut");
     var propertiesOut = document.getElementById("propertiesOut");
 
     // check if valid ATLAS SN or if not, if it is a slot
-    if (snIn.slice(0, 3) == '20W') {
+    if (snIn.slice(0, 3) == '99W') {
+        messageOut.value = 'This is a test SN only / dummy placeholder for DB development.';
+    } else if (snIn.slice(0, 3) == '20W') {
         messageOut.value = 'Attempting to decode ATLAS SN';
 
+        if (snIn.length < 14) {
+            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too few';
+        } else if (snIn.length > 14) {
+            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too many';
+        } else {
+            lengthMessageOut.value = '';
+        }
         // check for Sensor (sensor is special, it has only one digit for its component type)
         if (snIn[3] == 'S') {
             // either Sensor or Sensor Wafer
@@ -16,17 +26,30 @@ function getPropertiesFromSN() {
                 // Wafer
                 messageOut.value = 'Attempting to decode Wafer SN';
                 try {
-                    // note, every variable that is called somethingExplainer shall not be stored in the DB
-                    // this is just for human-readable decoding
+                    // note, every variable that is called somethingExplainer
+                    // is just for human-readable decoding with a meaning
+                    // not necessary to be stored in the DB
+                    // (component groups should complain if they should be stored)
                     var manu = snIn[5];
-                    var manuExplainer = manu;
+                    if (manu == '0') {
+                        var manuExplainer = 'IHEP-IME';
+                    } else if (manu == '1') {
+                        var manuExplainer = 'USTC-IME';
+                    } else {
+                        var manuExplainer = 'Unknown Manufacturer / Vendor attribute!';
+                    }
                     var prod = snIn[6];
-                    var prodExplainer = prod;
+                    if (prod == '0') {
+                        var prodExplainer = 'Pre-production';
+                    } else if (prod == '1') {
+                        var prodExplainer = 'Production';
+                    } else {
+                        var prodExplainer = 'Unknown Production attribute!';
+                    }
                     var batchn = `${snIn[7]}${snIn[8]}`;
                     var orient = snIn[9];
                     var wafern = `${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
-                    var wafernExplainer = wafern;
-                    propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Wafer orientation: ${orient}, Wafer number: ${wafern} (${wafernExplainer})`
+                    propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Wafer orientation: ${orient}, Wafer number: ${wafern}`
                     messageOut.value = 'Successfully decoded Wafer SN';
                 } catch {
                     messageOut.value = 'Failed to decode Wafer SN, check if you used this pattern: 20WS0MPBBONNNN';
@@ -36,23 +59,260 @@ function getPropertiesFromSN() {
                 messageOut.value = 'Attempting to decode Sensor SN';
                 try {
                     var manu = snIn[4];
-                    var manuExplainer = manu;
-                    var prod = snIn[5];
-                    var prodExplainer = prod;
+                    if (manu == '1') {
+                        var manuExplainer = 'IHEP-IME Pre-production';
+                    } else if (manu == '2') {
+                        var manuExplainer = 'IHEP-IME Production';
+                    } else if (manu == '3') {
+                        var manuExplainer = 'USTC-IME Pre-production';
+                    } else if (manu == '4') {
+                        var manuExplainer = 'USTC-IME Production';
+                    } else {
+                        var manuExplainer = 'Unknown Sensor type attribute!';
+                    }
+                    var stype = snIn[5];
+                    if (stype == '0') {
+                        var stypeExplainer = 'main sensor';
+                    } else if (stype == '1') {
+                        var stypeExplainer = 'QC-TS of main sensor';
+                    } else if (stype == '2') {
+                        var stypeExplainer = 'main partial sensor';
+                    } else if (stype == '3') {
+                        var stypeExplainer = 'QC-TS of main partial sensor';
+                    } else {
+                        var stypeExplainer = 'Unknown Sensor type attribute!';
+                    }
                     var batchn = `${snIn[6]}${snIn[7]}`;
                     var wafern = `${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}`;
                     var locInWaf = `${snIn[12]}${snIn[13]}`;
-                    var locInWafExplainer = locInWaf;
-                    propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Wafer number: ${wafern}, Location in wafer: ${locInWaf} (${locInWafExplainer})`
+                    if (parseInt(locInWaf) <= 52) {
+                        var locInWafExplainer = 'main sensor';
+                    } else if (parseInt(locInWaf) >= 61) {
+                        var locInWafExplainer = 'partial sensor';
+                    } else {
+                        var locInWafExplainer = 'Unknown Location in wafer attribute!';
+                    }
+                    propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Sensor type: ${stype} (${stypeExplainer}), Batch number: ${batchn}, Wafer number: ${wafern}, Location in wafer: ${locInWaf} (${locInWafExplainer})`
                     messageOut.value = 'Successfully decoded Sensor SN';
                 } catch {
                     messageOut.value = 'Failed to decode Sensor SN, check if you used this pattern: 20WSMEBBNNNNXY';
                 }
             }
+        } else if (snIn[3] == 'F' && snIn[4] == 'T') {
+            messageOut.value = 'Attempting to decode Flex Tail SN';
+            try {
+                var manu = snIn[5];
+                var snGeneration = 2; // 0: pre 24052023, 1: post 24052023 but pre 2025, 2 (default): from 2025 for (pre-)production
+                if (manu == 'G') {
+                    var manuExplainer = 'Germany';
+                } else if (manu == 'C') {
+                    var manuExplainer = 'China';
+                } else if (manu == 'S') {
+                    var manuExplainer = 'Slovenia';
+                } else if (manu == '1') {
+                    snGeneration = 0;
+                    var manuExplainer = 'Germany';
+                } else if (manu == '2') {
+                    snGeneration = 0;
+                    var manuExplainer = 'China';
+                } else if (manu == '3') {
+                    snGeneration = 0;
+                    var manuExplainer = 'Slovenia';
+                } else {
+                    var manuExplainer = 'Unknown Vendor attribute!';
+                }
+                var digitSeven = snIn[6];
+                var digitEight = snIn[7];
+                if ((digitEight == 'D') && (parseInt(digitSeven) <= 2)) {
+                    snGeneration = 1;
+                    messageOut.value = 'Recognize old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2025';
+                } else {
+                    if (snGeneration == 2) {
+                        messageOut.value = 'Recognize newest Flex Tail SN definition, used from 2025 for (pre-)production as documented in ATL-COM-HGTD-2024-026';
+                    } else {
+                        messageOut.value = 'Recognize old Flex Tail SN definition, used for demonstrator until 24.05.2023';
+                    }
+                }
+                var readout = `${snIn[8]}`;
+                if (readout == 'R') {
+                    var readoutExplainer = 'single readout';
+                } else if (readout == 'F') {
+                    var readoutExplainer = 'full readout';
+                } else {
+                    var readoutExplainer = 'Unknown Readout attribute!';
+                }
+                var fttype = `${snIn[9]}${snIn[10]}`; // what they mean is different for each generation
+                var fttypeExplainer = 'Small length type: long cable, conversion to mm found in Slot table for vessel D (demonstrator) or A/C (production), work in progress';
+                var ftcounter = `${snIn[11]}${snIn[12]}${snIn[13]}`;
+                // now we know the SN generation, we can proceed
+                if (snGeneration == 2) {
+                    var prod = digitSeven;
+                    if (prod == 'M') {
+                        var prodExplainer = 'main production';
+                    } else if (prod == 'D') {
+                        var prodExplainer = 'demonstrator';
+                    } else if (prod == 'T') {
+                        var prodExplainer = 'test';
+                    } else if (prod == 'O') {
+                        var prodExplainer = 'other';
+                    } else {
+                        var prodExplainer = 'Unknown Production attribute!';
+                    }
+                    var batchn = digitEight;
+                } else if (snGeneration == 1) {
+                    var prod = digitEight;
+                    if (prod == 'M') {
+                        var prodExplainer = 'main production';
+                    } else if (prod == 'D') {
+                        var prodExplainer = 'demonstrator';
+                    } else if (prod == 'T') {
+                        var prodExplainer = 'test';
+                    } else if (prod == 'O') {
+                        var prodExplainer = 'other';
+                    } else {
+                        var prodExplainer = 'Unknown Production attribute!';
+                    }
+                    var batchn = digitSeven;
+                } else {
+                    var prod = digitEight;
+                    if (prod == '0') {
+                        var prodExplainer = 'main production';
+                    } else if (prod == '1') {
+                        var prodExplainer = 'demonstrator';
+                    } else if (prod == '2') {
+                        var prodExplainer = 'test';
+                    } else if (prod == '3') {
+                        var prodExplainer = 'other';
+                    } else {
+                        var prodExplainer = 'Unknown Production attribute!';
+                    }
+                    var batchn = digitSeven;
+                }
+
+                propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Readout: ${readout}, Type: ${fttype} (${fttypeExplainer}), Counter: ${ftcounter}`
+                if (snGeneration == 2) {
+                    messageOut.value = 'Successfully decoded newest Flex Tail SN definition, used from 2025 for (pre-)production as documented in ATL-COM-HGTD-2024-026';
+                } else if (snGeneration == 1) {
+                    messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2025';
+                } else {
+                    messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator until 24.05.2023';
+                }
+            } catch {
+                messageOut.value = 'Failed to decode FT SN, check if you used this pattern: 20WFTMBPQTTNNN (or an older SN pattern for the demonstrator)';
+            }
+        } else if (snIn[3] == 'M' && snIn[4] == 'O') {
+            messageOut.value = 'Attempting to decode Module SN';
+            try {
+                var as = snIn[5];
+                if ((as == 'K') || (as == '1')) {
+                    var asExplainer = 'IFAE';
+                } else if ((as == 'H') || (as == '2')) {
+                    var asExplainer = 'IHEP';
+                } else if ((as == 'J') || (as == '3')) {
+                    var asExplainer = 'IJCLab';
+                } else if ((as == 'M') || (as == '4')) {
+                    var asExplainer = 'Mainz';
+                } else if ((as == 'A') || (as == '5')) {
+                    var asExplainer = 'MAScIR';
+                } else if ((as == 'U') || (as == '6')) {
+                    var asExplainer = 'USTC';
+                } else {
+                    var asExplainer = 'Unknown Assembly site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var batchn = `${snIn[7]}`;
+                var counter = `${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
+
+                propertiesOut.value = `Assembly site: ${as} (${asExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Counter: ${counter}`
+                messageOut.value = 'Successfully decoded Module SN';
+            } catch {
+                messageOut.value = 'Failed to decode Module SN, check if you used this pattern: 20WMOKPBNNNNNN';
+            }
+        } else if (snIn[3] == 'H' && snIn[4] == 'Y') {
+            messageOut.value = 'Attempting to decode Hybrid SN';
+            try {
+                var manu = snIn[5];
+                if ((manu == 'K') || (manu == '1')) {
+                    var manuExplainer = 'IFAE';
+                } else if ((manu == 'H') || (manu == '2')) {
+                    var manuExplainer = 'IHEP';
+                } else if ((manu == 'J') || (manu == '3')) {
+                    var manuExplainer = 'IJCLab';
+                } else if ((manu == 'M') || (manu == '4')) {
+                    var manuExplainer = 'Mainz';
+                } else if ((manu == 'A') || (manu == '5')) {
+                    var manuExplainer = 'MAScIR';
+                } else if ((manu == 'U') || (manu == '6')) {
+                    var manuExplainer = 'USTC';
+                } else {
+                    var manuExplainer = 'Unknown Assembly site attribute!';
+                }
+                var prod = snIn[6];
+                if ((prod == 'M') || (prod == '0')) {
+                    var prodExplainer = 'Main production';
+                } else if (prod == 'P') {
+                    var prodExplainer = 'Pre-production';
+                } else if ((prod == 'D') || (prod == '1')) {
+                    var prodExplainer = 'demonstrator';
+                } else if ((prod == 'T') || (prod == '2')) {
+                    var prodExplainer = 'test';
+                } else if ((prod == 'O') || (prod == '3')) {
+                    var prodExplainer = 'other';
+                } else {
+                    var prodExplainer = 'Unknown Production attribute!';
+                }
+                var counter = `${snIn[7]}${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
+
+                propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Counter: ${counter}`
+                messageOut.value = 'Successfully decoded Hybrid SN';
+            } catch {
+                messageOut.value = 'Failed to decode Hybrid SN, check if you used this pattern: 20WHYMPNNNNNNN';
+            }
+        } else if (snIn[3] == 'A' && snIn[4] == 'S') {
+            messageOut.value = 'Attempting to decode ASIC SN';
+
+        } else if (snIn[3] == 'M' && snIn[4] == 'F') {
+            messageOut.value = 'Attempting to decode Module Flex SN';
+
+        } else if (snIn[3] == 'S' && snIn[4] == 'U') {
+            messageOut.value = 'Attempting to decode Support Unit SN';
+
+        } else if (snIn[3] == 'D' && snIn[4] == 'U') {
+            messageOut.value = 'Attempting to decode Detector Unit SN';
+
+        } else if (snIn[3] == 'G' && snIn[4] == 'L') {
+            messageOut.value = 'Attempting to decode Glue SN';
+
+        } else if (snIn[3] == 'P' && snIn[4] == 'E') {
+            messageOut.value = 'Attempting to decode PEB SN';
+
+        } else {
+            messageOut.value = 'Invalid or incomplete Serial Number';
         }
 
     } else if (snIn[0] == 'V') {
         messageOut.value = 'Attempting to decode Slot SN';
+        //if (snIn.includes('V') && snIn.includes('L')
+        if (snIn.length < 14) {
+            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too few';
+        } else if (snIn.length > 14) {
+            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too many';
+        } else {
+            lengthMessageOut.value = '';
+        }
         try {
             var vessel = snIn[1];
             var layer = snIn[4];
@@ -67,10 +327,6 @@ function getPropertiesFromSN() {
     } else {
         messageOut.value = 'Invalid Serial Number';
     }
-
-    // for (const key of Object.keys(kopStr)) {
-    //     console.log(key);
-    //     if (parentSNIn.includes(key)) {
 }
 function getSNFromProperties() {
     var kopIn = document.getElementById("kopIn-select");
