@@ -276,7 +276,7 @@ addBut.addEventListener('click', function(e) {
     var positionOut = document.getElementById("positionOut").value;
     var positionDetDU = document.getElementById("positionDetDU").value;
 
-    if (parentNameIn == "DU" && childNameIn == "Module") {
+    if (parentNameIn == "Detector Unit" && childNameIn == "Module") {
         // in real life for the production DB, need to add the relation to the SQL here
         relations_DU_MODULE.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionOut]);
         document.getElementById('relations_DU_MODULE').innerHTML += parentNameIn + ", " + parentSNIn + ", " + childNameIn + ", " + childSNIn + ", " + positionOut + "<br />";
@@ -300,15 +300,15 @@ addBut.addEventListener('click', function(e) {
             }
             let uniquePositionsThisDU = [...new Set(filledPositionsThisDU)];
             if (uniquePositionsThisDU.length == allDUs[displayedDUtype].length) {
-                console.log("Congrats, you loaded a full DU!");
-                alert("Congrats, you loaded a full DU!");
+                console.log("Congrats, you loaded a full Detector Unit!");
+                alert("Congrats, you loaded a full Detector Unit!");
             } else {
-                console.log("The DU is equipped with sufficient modules, but you must have made a mistake in filling them into unique positions!");
-                alert("The DU is equipped with sufficient modules, but you must have made a mistake in filling them into unique positions!");
+                console.log("The Detector Unit is equipped with sufficient modules, but you must have made a mistake in filling them into unique positions!");
+                alert("The Detector Unit is equipped with sufficient modules, but you must have made a mistake in filling them into unique positions!");
             }
 
         }
-    } else if (parentNameIn == "Detector" && childNameIn == "DU") {
+    } else if (parentNameIn == "Detector" && childNameIn == "Detector Unit") {
         relations_DETECTOR_DU.push([parentNameIn, parentSNIn, childNameIn, childSNIn, positionDetDU]);
         var attribute_Vessel = positionDetDU.split('V').pop().split('L')[0];
         var attribute_Layer = positionDetDU.split('L').pop().split('Q')[0];
@@ -363,7 +363,7 @@ function showClickable() {
 
     var canvas = document.getElementById("duCanvas");
 
-    if (parentNameIn.value == 'DU' && childNameIn.value == 'Module') {
+    if (parentNameIn.value == 'Detector Unit' && childNameIn.value == 'Module') {
         positionOut.value = ' Implemented ';
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -402,7 +402,7 @@ function showClickable() {
                 }
                 break;
             } else {
-                positionOut.value = ' Implemented, but not yet for this specific DU type ';
+                positionOut.value = ' Implemented, but not yet for this specific Detector Unit type ';
             }
         }
     } else {
@@ -464,7 +464,7 @@ function drawOutput(lines){
 
 function errorHandler(evt) {
 	if(evt.target.error.name == "NotReadableError") {
-		alert("Canno't read file !");
+		alert("Can not read file !");
 	}
 }
 

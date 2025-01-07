@@ -18,11 +18,11 @@
             <a href="serialnumber.html">Serial Number Decoding / Encoding Mockup</a>
         </p>
         <h1>Clickable Slot Location Selection Mockup</h1>
-        <p>How the manual location selection / relation creation process could look like, for Modules (child) within a DU (parent). After loading, for DUs (child) within a Detector (parent).</p>
+        <p>How the manual location selection / relation creation process could look like, for Modules (child) within a Detector Unit (parent). After loading, for Detector Unit (child) within a Detector (parent).</p>
         <p><em><span style="color:red;">Preliminary user action for this mockup:</span></em> Before using the form below, upload a slot table csv on the bottom of the page. This will be used to find the slot relations later.</p>
-        <p>Modeled after the /addpartstree page of the official ProdDB, you can try various DUs here and select the respective modules by clicking them.</p>
-        <p>Each SU is oriented in such a way that when looking at its face, the module connectors are at the top (or on the right), and module capacitors are on the bottom (or on the left).</p>
-        <p><em><span style="color:red;">User actions (loading sites / assembly at CERN):</span></em> First step at a loading site: fill the DU with modules, click on the canvas to select the correct position and use the button below. Once finished, move to the assembly step at CERN and enter the position manually when connecting a DU with the Detector (VxLxQx). Note: A back DU can only be on layer 1 or 2, a front DU can only be on layer 0 or 3.</p>
+        <p>Modeled after the /addpartstree page of the official ProdDB, you can try various Detector Units here and select the respective modules by clicking them.</p>
+        <p>Each Support Unit is oriented in such a way that when looking at its face, the module connectors are at the top (or on the right), and module capacitors are on the bottom (or on the left).</p>
+        <p><em><span style="color:red;">User actions (loading sites / assembly at CERN):</span></em> First step at a loading site: fill the Detector Unit with modules, click on the canvas to select the correct position and use the button below. Once finished, move to the assembly step at CERN and enter the position manually when connecting a Detector Unit with the Detector (VxLxQx). Note: A back Detector Unit can only be on layer 1 or 2, a front Detector Unit can only be on layer 0 or 3.</p>
         <p>If you did everything correctly, you can see the correct slots per loaded module and from those, see the suitable flex tail categories.</p>
         <div id="content">
             <div id="fields">
@@ -38,10 +38,10 @@
                 <label for="childSNIn">Child SN:</label>
                 <input id="childSNIn" name="childSN-input" oninput="showClickable()" value="Child SN" type="text" />
                 <br><br>
-                <label for="positionDetDU">Position (only when doing Detector -> DU):</label>
+                <label for="positionDetDU">Position (only when doing Detector -> Detector Unit):</label>
                 <input id="positionDetDU" name="positionDetDU-input" oninput="showClickable()" value="VxLxQx" type="text" />
                 <br><br>
-                <label for="positionOut">Position (only when doing DU -> Module):</label>
+                <label for="positionOut">Position (only when doing Detector Unit -> Module):</label>
                 <output id="positionOut" name="position-output" style="background-color:#EEE"> Waiting for user input </output>
                 <br><br>
                 <button type="button" id="addBut">ADD PARTS TREE</button>

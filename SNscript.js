@@ -568,7 +568,7 @@ function getSNFromProperties() {
         el.classList.add("hidden");
     }
     snOut.value = '';
-    if (kopIn.value == 'FT') {
+    if (kopIn.value == 'Flex Tail') {
         var encodeFT_div = document.querySelector('#encodeFT');
         encodeFT_div.classList.remove("hidden");
         var ft_manuIn = document.getElementById("ft-manuIn-select");
