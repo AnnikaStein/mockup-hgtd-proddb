@@ -13,3 +13,7 @@
 #duCanvas {
     border: 1px solid #555;
 }
+
+.hidden {
+    display: none;
+}

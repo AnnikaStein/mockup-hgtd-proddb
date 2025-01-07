@@ -149,7 +149,9 @@ function getPropertiesFromSN() {
                 if (snGeneration == 2) {
                     var prod = digitSeven;
                     if (prod == 'M') {
-                        var prodExplainer = 'main production';
+                        var prodExplainer = 'Main production';
+                    } else if (prod == 'P') {
+                        var prodExplainer = 'Pre-production';
                     } else if (prod == 'D') {
                         var prodExplainer = 'demonstrator';
                     } else if (prod == 'T') {
@@ -163,7 +165,7 @@ function getPropertiesFromSN() {
                 } else if (snGeneration == 1) {
                     var prod = digitEight;
                     if (prod == 'M') {
-                        var prodExplainer = 'main production';
+                        var prodExplainer = 'Main production';
                     } else if (prod == 'D') {
                         var prodExplainer = 'demonstrator';
                     } else if (prod == 'T') {
@@ -177,7 +179,7 @@ function getPropertiesFromSN() {
                 } else {
                     var prod = digitEight;
                     if (prod == '0') {
-                        var prodExplainer = 'main production';
+                        var prodExplainer = 'Main production';
                     } else if (prod == '1') {
                         var prodExplainer = 'demonstrator';
                     } else if (prod == '2') {
@@ -561,6 +563,20 @@ function getPropertiesFromSN() {
 function getSNFromProperties() {
     var kopIn = document.getElementById("kopIn-select");
     var snOut = document.getElementById("snOut");
-
-
+    const encodeSN_divs = document.getElementsByClassName('encodeSN');
+    for (el of encodeSN_divs) {
+        el.classList.add("hidden");
+    }
+    snOut.value = '';
+    if (kopIn.value == 'FT') {
+        var encodeFT_div = document.querySelector('#encodeFT');
+        encodeFT_div.classList.remove("hidden");
+        var ft_manuIn = document.getElementById("ft-manuIn-select");
+        var ft_prodIn = document.getElementById("ft-prodIn-select");
+        var ft_batchnIn = document.getElementById("ft-batchnIn");
+        var ft_readoutIn = document.getElementById("ft-readoutIn-select");
+        var ft_typeIn = document.getElementById("ft-typeIn");
+        var ft_counterIn = document.getElementById("ft-counterIn");
+        snOut.value = `20WFT${ft_manuIn.value}${ft_prodIn.value}${ft_batchnIn.value}${ft_readoutIn.value}${ft_typeIn.value}${ft_counterIn.value}`;
+    }
 }

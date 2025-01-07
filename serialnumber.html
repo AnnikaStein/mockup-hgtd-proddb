@@ -47,9 +47,9 @@
 
         <label for="kopIn">Kind of part:</label>
         <select name="kopIn" id="kopIn-select" onchange="getSNFromProperties()">
-            <option value="ASIC" selected>ASIC</option>
+            <option value="ASIC">ASIC</option>
             <option value="DU">DU</option>
-            <option value="FT">FT</option>
+            <option value="FT" selected>FT</option>
             <option value="Glue">Glue</option>
             <option value="Hybrid">Hybrid</option>
             <option value="Module">Module</option>
@@ -60,13 +60,48 @@
             <option value="SU">SU</option>
             <option value="Wafer">Wafer</option>
         </select>
-        <br><br>
-        <output id="snOut">
+        Encoded SN: <output id="snOut">
         </output>
+        <br>
+        <i>Please fill in or select all required properties.</i>
+        <div class="encodeSN hidden" id="encodeASIC">
+            ASIC
+        </div>
+        <div class="encodeSN" id="encodeFT">
+            <label for="ft-manuIn">Manufacturer / Vendor:</label>
+            <select name="ft-manuIn" id="ft-manuIn-select" onchange="getSNFromProperties()">
+                <option value="G">Germany</option>
+                <option value="C">China</option>
+                <option value="S" selected>Slovenia</option>
+            </select>
+            <br>
+            <label for="ft-prodIn">Production:</label>
+            <select name="ft-prodIn" id="ft-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="ft-batchnIn">Batch number:</label>
+            <input id="ft-batchnIn" name="ft-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <br>
+            <label for="ft-readoutIn">Readout:</label>
+            <select name="ft-readoutIn" id="ft-readoutIn-select" onchange="getSNFromProperties()">
+                <option value="R" selected>single readout</option>
+                <option value="F">full readout</option>
+            </select>
+            <br>
+            <label for="ft-typeIn">Type:</label>
+            <input id="ft-typeIn" name="ft-typeIn-input" oninput="getSNFromProperties()" value="76" type="text" />
+            <br>
+            <label for="ft-counterIn">Counter:</label>
+            <input id="ft-counterIn" name="ft-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <br>
+        </div>
+        <br><br>
         <hr>
-
-
-
     </div>
   </body>
 </html>
