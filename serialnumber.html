@@ -27,7 +27,8 @@
             remaining Y: individual per component). For properties that have a human-readable explainer comment,
             this will be written in parenthesis. For slots, the pattern must match Vx:Lx:Qx:Rx:Mx (replace the x).</p>
         <p><em><span style="color:red;">If you want to encode:</span></em> Specify the part and corresponding properties
-            that are used to build the SN.</p>
+            that are used to build the SN. If you enter less digits than the expected number, your entered input gets
+            zero-padded at the start. Example: Flex Tail counter consists of three digits. If you enter "9" we build into the SN: "009".</p>
 
         <h2>Decode (SN known, properties unknown)</h2>
 
@@ -64,8 +65,68 @@
         </output>
         <br>
         <i>Please fill in or select all required properties.</i>
-        <div class="encodeSN hidden" id="encodeASIC">
-            ASIC
+        <div class="encodeSN hidden" id="encodeAS">
+            <label for="as-testsIn">Test site:</label>
+            <select name="as-testsIn" id="as-testsIn-select" onchange="getSNFromProperties()">
+                <option value="H" selected>IHEP</option>
+                <option value="J">IJCLab</option>
+            </select>
+            <br>
+            <label for="as-prodIn">Production:</label>
+            <select name="as-prodIn" id="as-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="as-wafernIn">Wafer_Nr (4 digits):</label>
+            <input id="as-wafernIn" name="as-wafernIn-input" oninput="getSNFromProperties()" value="0001" type="text" />
+            <br>
+            <label for="as-chipidIn">Chip_ID (3 digits):</label>
+            <input id="as-chipidIn" name="as-chipidIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeDU">
+            <label for="du-siteIn">Site:</label>
+            <select name="du-siteIn" id="du-siteIn-select" onchange="getSNFromProperties()">
+                <option value="K" selected>IFAE</option>
+                <option value="H">IHEP</option>
+                <option value="J">IJCLab</option>
+                <option value="M">Mainz</option>
+                <option value="A">MAScIR</option>
+                <option value="U">USTC</option>
+            </select>
+            <br>
+            <label for="du-prodIn">Production:</label>
+            <select name="du-prodIn" id="du-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="du-sideIn">Side of HGTD disk:</label>
+            <select name="du-sideIn" id="du-sideIn-select" onchange="getSNFromProperties()">
+                <option value="F" selected>front</option>
+                <option value="B">back</option>
+            </select>
+            <br>
+            <label for="du-ringIn">Ring:</label>
+            <select name="du-ringIn" id="du-ringIn-select" onchange="getSNFromProperties()">
+                <option value="I" selected>inner</option>
+                <option value="M">middle</option>
+                <option value="O">outer</option>
+            </select>
+            <br>
+            <label for="du-typeIn">Type of DU (2 digits):</label>
+            <input id="du-typeIn" name="du-typeIn-input" oninput="getSNFromProperties()" value="10" type="text" />
+            <br>
+            <label for="du-counterIn">Counter (3 digits):</label>
+            <input id="du-counterIn" name="du-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <br>
         </div>
         <div class="encodeSN" id="encodeFT">
             <label for="ft-manuIn">Manufacturer / Vendor:</label>
@@ -93,11 +154,259 @@
                 <option value="F">full readout</option>
             </select>
             <br>
-            <label for="ft-typeIn">Type:</label>
+            <label for="ft-typeIn">Type (2 digits):</label>
             <input id="ft-typeIn" name="ft-typeIn-input" oninput="getSNFromProperties()" value="76" type="text" />
             <br>
-            <label for="ft-counterIn">Counter:</label>
+            <label for="ft-counterIn">Counter (3 digits):</label>
             <input id="ft-counterIn" name="ft-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeGL">
+            <label for="gl-manuIn">Site:</label>
+            <select name="gl-manuIn" id="gl-manuIn-select" onchange="getSNFromProperties()">
+                <option value="K" selected>IFAE</option>
+                <option value="H">IHEP</option>
+                <option value="J">IJCLab</option>
+                <option value="M">Mainz</option>
+                <option value="A">MAScIR</option>
+                <option value="U">USTC</option>
+            </select>
+            <br>
+            <label for="gl-prodIn">Production:</label>
+            <select name="gl-prodIn" id="gl-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="gl-counterIn">Counter (7 digits):</label>
+            <input id="gl-counterIn" name="gl-counterIn-input" oninput="getSNFromProperties()" value="0000001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeHY">
+            <label for="hy-manuIn">Site:</label>
+            <select name="hy-manuIn" id="hy-manuIn-select" onchange="getSNFromProperties()">
+                <option value="K" selected>IFAE</option>
+                <option value="H">IHEP</option>
+                <option value="J">IJCLab</option>
+                <option value="M">Mainz</option>
+                <option value="A">MAScIR</option>
+                <option value="U">USTC</option>
+            </select>
+            <br>
+            <label for="hy-prodIn">Production:</label>
+            <select name="hy-prodIn" id="hy-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="hy-counterIn">Counter (7 digits):</label>
+            <input id="hy-counterIn" name="hy-counterIn-input" oninput="getSNFromProperties()" value="0000001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeMO">
+            <label for="mo-siteIn">Site:</label>
+            <select name="mo-siteIn" id="mo-siteIn-select" onchange="getSNFromProperties()">
+                <option value="K" selected>IFAE</option>
+                <option value="H">IHEP</option>
+                <option value="J">IJCLab</option>
+                <option value="M">Mainz</option>
+                <option value="A">MAScIR</option>
+                <option value="U">USTC</option>
+            </select>
+            <br>
+            <label for="mo-prodIn">Production:</label>
+            <select name="mo-prodIn" id="mo-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="mo-batchnIn">Batch number:</label>
+            <input id="mo-batchnIn" name="mo-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <br>
+            <label for="mo-counterIn">Counter (6 digits):</label>
+            <input id="mo-counterIn" name="mo-counterIn-input" oninput="getSNFromProperties()" value="000001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeMF">
+            <label for="mf-siteIn">Site:</label>
+            <select name="mf-siteIn" id="mf-siteIn-select" onchange="getSNFromProperties()">
+                <option value="H" selected>IHEP</option>
+            </select>
+            <br>
+            <label for="mf-prodIn">Production:</label>
+            <select name="mf-prodIn" id="mf-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="mf-batchnIn">Batch number:</label>
+            <input id="mf-batchnIn" name="mf-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <br>
+            <label for="mf-groundingIn">Grounding scheme:</label>
+            <input id="mf-groundingIn" name="mf-groundingIn-input" oninput="getSNFromProperties()" value="A" type="text" />
+            <br>
+            <label for="mf-counterIn">Counter (5 digits):</label>
+            <input id="mf-counterIn" name="mf-counterIn-input" oninput="getSNFromProperties()" value="00001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodePE">
+            <label for="pe-manuIn">Site:</label>
+            <select name="pe-manuIn" id="pe-manuIn-select" onchange="getSNFromProperties()">
+                <option value="H" selected>IHEP</option>
+                <option value="N">NJU</option>
+            </select>
+            <br>
+            <label for="pe-prodIn">Production:</label>
+            <select name="pe-prodIn" id="pe-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="pe-batchnIn">Batch number:</label>
+            <input id="pe-batchnIn" name="pe-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <br>
+            <label for="pe-groundingIn">Grounding scheme:</label>
+            <input id="pe-groundingIn" name="pe-groundingIn-input" oninput="getSNFromProperties()" value="A" type="text" />
+            <br>
+            <label for="pe-counterIn">Counter (5 digits):</label>
+            <input id="pe-counterIn" name="pe-counterIn-input" oninput="getSNFromProperties()" value="00001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeS">
+            <label for="s-manuIn">Manufacturer / Vendor:</label>
+            <select name="s-manuIn" id="s-manuIn-select" onchange="getSNFromProperties()">
+                <option value="1" selected>IHEP-IME Pre-production</option>
+                <option value="2">IHEP-IME Production</option>
+                <option value="3">USTC-IME Pre-production</option>
+                <option value="4">USTC-IME Production</option>
+            </select>
+            <br>
+            <label for="s-typeIn">Sensor type:</label>
+            <select name="s-typeIn" id="s-typeIn-select" onchange="getSNFromProperties()">
+                <option value="0" selected>main sensor</option>
+                <option value="1">QC-TS of main sensor</option>
+                <option value="2">main partial sensor</option>
+                <option value="3">QC-Ts of main partial sensor</option>
+            </select>
+            <br>
+            <label for="s-batchnIn">Batch number (2 digits):</label>
+            <input id="s-batchnIn" name="s-batchnIn-input" oninput="getSNFromProperties()" value="01" type="text" />
+            <br>
+            <label for="s-wafernIn">Wafer number (4 digit):</label>
+            <input id="s-wafernIn" name="s-wafernIn-input" oninput="getSNFromProperties()" value="0001" type="text" />
+            <br>
+            <label for="s-locInWafIn">Location in wafer (2 digits):</label>
+            <input id="s-locInWafIn" name="s-locInWafIn-input" oninput="getSNFromProperties()" value="01" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeSL">
+            <label for="sl-vesselIn">Vessel:</label>
+            <select name="sl-vesselIn" id="sl-vesselIn-select" onchange="getSNFromProperties()">
+                <option value="A" selected>side A in cavern</option>
+                <option value="C">side C in cavern</option>
+                <option value="M">Module_0</option>
+                <option value="D">Demonstrator</option>
+            </select>
+            <br>
+            <label for="sl-layerIn">Layer:</label>
+            <select name="sl-layerIn" id="sl-layerIn-select" onchange="getSNFromProperties()">
+                <option value="0" selected>Front facing IP Layer 0</option>
+                <option value="1">Back facing HCAL Layer 1</option>
+                <option value="2">Back facing IP Layer 2</option>
+                <option value="3">Front facing HCAL Layer 3</option>
+            </select>
+            <br>
+            <label for="sl-quadIn">Quadrant:</label>
+            <select name="sl-quadIn" id="sl-quadIn-select" onchange="getSNFromProperties()">
+                <option value="0" selected>top internal ring</option>
+                <option value="1">top external ring</option>
+                <option value="2">bottom external ring</option>
+                <option value="3">bottom internal ring</option>
+            </select>
+            <br>
+            <label for="sl-rowIn">Row:</label>
+            <input id="sl-rowIn" name="sl-rowIn-input" oninput="getSNFromProperties()" value="21" type="text" />
+            <br>
+            <label for="sl-modIn">Module:</label>
+            <input id="sl-modIn" name="sl-modIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeSU">
+            <label for="su-siteIn">Site:</label>
+            <select name="su-siteIn" id="su-siteIn-select" onchange="getSNFromProperties()">
+                <option value="K" selected>IFAE</option>
+                <option value="H">IHEP</option>
+                <option value="J">IJCLab</option>
+                <option value="M">Mainz</option>
+                <option value="A">MAScIR</option>
+                <option value="U">USTC</option>
+            </select>
+            <br>
+            <label for="su-prodIn">Production:</label>
+            <select name="su-prodIn" id="su-prodIn-select" onchange="getSNFromProperties()">
+                <option value="M" selected>Main production</option>
+                <option value="P">Pre-production</option>
+                <option value="D">demonstrator</option>
+                <option value="T">test</option>
+                <option value="O">other</option>
+            </select>
+            <br>
+            <label for="su-sideIn">Side of HGTD disk:</label>
+            <select name="su-sideIn" id="su-sideIn-select" onchange="getSNFromProperties()">
+                <option value="F" selected>front</option>
+                <option value="B">back</option>
+            </select>
+            <br>
+            <label for="su-ringIn">Ring:</label>
+            <select name="su-ringIn" id="su-ringIn-select" onchange="getSNFromProperties()">
+                <option value="I" selected>inner</option>
+                <option value="M">middle</option>
+                <option value="O">outer</option>
+            </select>
+            <br>
+            <label for="su-typeIn">Type of SU (2 digits):</label>
+            <input id="su-typeIn" name="su-typeIn-input" oninput="getSNFromProperties()" value="10" type="text" />
+            <br>
+            <label for="su-counterIn">Counter (3 digits):</label>
+            <input id="su-counterIn" name="su-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <br>
+        </div>
+        <div class="encodeSN hidden" id="encodeS0">
+            <label for="s0-manuIn">Manufacturer / Vendor:</label>
+            <select name="s0-manuIn" id="s0-manuIn-select" onchange="getSNFromProperties()">
+                <option value="0" selected>IHEP-IME</option>
+                <option value="1">USTC-IME</option>
+            </select>
+            <br>
+            <label for="s0-prodIn">Production:</label>
+            <select name="s0-prodIn" id="s0-prodIn-select" onchange="getSNFromProperties()">
+                <option value="0" selected>Pre-production</option>
+                <option value="1">Production</option>
+            </select>
+            <br>
+            <label for="s0-batchnIn">Batch number (2 digits):</label>
+            <input id="s0-batchnIn" name="s0-batchnIn-input" oninput="getSNFromProperties()" value="00" type="text" />
+            <br>
+            <label for="s0-orientIn">Wafer orientation (1 digit):</label>
+            <input id="s0-orientIn" name="s0-orientIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <br>
+            <label for="s0-counterIn">Counter (4 digits):</label>
+            <input id="s0-counterIn" name="s0-counterIn-input" oninput="getSNFromProperties()" value="0001" type="text" />
             <br>
         </div>
         <br><br>

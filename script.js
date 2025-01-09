@@ -153,9 +153,12 @@ const allDUs = {
 };
 console.log("Number of implemented DUs: " + Object.keys(allDUs).length);
 var totalNModules = 0;
+var allDUkeysStr = '';
 for (key of Object.keys(allDUs)) {
+    allDUkeysStr += `"${key}",`;
     totalNModules = totalNModules + allDUs[key].length;
 }
+console.log(allDUkeysStr);
 console.log("Number of implemented Modules: " + totalNModules);
 
 var displayedDUtype = "None";

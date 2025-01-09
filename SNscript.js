@@ -1,5 +1,3 @@
-kopStr = {}
-
 function getPropertiesFromSN() {
     var snIn = document.getElementById("snIn").value;
     var messageOut = document.getElementById("messageOut");
@@ -560,6 +558,9 @@ function getPropertiesFromSN() {
         messageOut.value = 'Invalid Serial Number';
     }
 }
+
+allowedDUtypes = ["BI01","BI10","BI12","BM01","BM02","BM03","BM04","BM05","BM06","BM08","BM09","BM10","BM11","BM12","BO01","BO02","BO03","BO04","BO05","BO06","BO07","BO08","BO10","BO12","FI01","FI10","FI12","FM01","FM02","FM03","FM04","FM05","FM06","FM08","FM09","FM10","FM11","FM12","FO01","FO02","FO03","FO04","FO05","FO06","FO07","FO08","FO10","FO12"];
+
 function getSNFromProperties() {
     var kopIn = document.getElementById("kopIn-select");
     var snOut = document.getElementById("snOut");
@@ -568,15 +569,118 @@ function getSNFromProperties() {
         el.classList.add("hidden");
     }
     snOut.value = '';
-    if (kopIn.value == 'Flex Tail') {
-        var encodeFT_div = document.querySelector('#encodeFT');
-        encodeFT_div.classList.remove("hidden");
+    if (kopIn.value == 'ASIC') {
+        var encode_div = document.querySelector('#encodeAS');
+        encode_div.classList.remove("hidden");
+        var as_testsIn = document.getElementById("as-testsIn-select");
+        var as_prodIn = document.getElementById("as-prodIn-select");
+        var as_wafernIn = document.getElementById("as-wafernIn");
+        var as_chipidIn = document.getElementById("as-chipidIn");
+        snOut.value = `20WAS${as_testsIn.value}${as_prodIn.value}${as_wafernIn.value.padStart(4, '0')}${as_chipidIn.value.padStart(3, '0')}`;
+    } else if (kopIn.value == 'Detector Unit') {
+        var encode_div = document.querySelector('#encodeDU');
+        encode_div.classList.remove("hidden");
+        var du_siteIn = document.getElementById("du-siteIn-select");
+        var du_prodIn = document.getElementById("du-prodIn-select");
+        var du_sideIn = document.getElementById("du-sideIn-select");
+        var du_ringIn = document.getElementById("du-ringIn-select");
+        var du_typeIn = document.getElementById("du-typeIn");
+        var du_counterIn = document.getElementById("du-counterIn");
+        if (!allowedDUtypes.includes(`${du_sideIn.value}${du_ringIn.value}${du_typeIn.value.padStart(2, '0')}`)) {
+            snOut.value = `The combined side, ring and type are not valid. Please choose one of the 48 types for which a technical drawing exists!`;
+        } else {
+            snOut.value = `20WDU${du_siteIn.value}${du_prodIn.value}${du_sideIn.value}${du_ringIn.value}${du_typeIn.value.padStart(2, '0')}${du_counterIn.value.padStart(3, '0')}`;
+        }
+    } else if (kopIn.value == 'Flex Tail') {
+        var encode_div = document.querySelector('#encodeFT');
+        encode_div.classList.remove("hidden");
         var ft_manuIn = document.getElementById("ft-manuIn-select");
         var ft_prodIn = document.getElementById("ft-prodIn-select");
         var ft_batchnIn = document.getElementById("ft-batchnIn");
         var ft_readoutIn = document.getElementById("ft-readoutIn-select");
         var ft_typeIn = document.getElementById("ft-typeIn");
         var ft_counterIn = document.getElementById("ft-counterIn");
-        snOut.value = `20WFT${ft_manuIn.value}${ft_prodIn.value}${ft_batchnIn.value}${ft_readoutIn.value}${ft_typeIn.value}${ft_counterIn.value}`;
+        snOut.value = `20WFT${ft_manuIn.value}${ft_prodIn.value}${ft_batchnIn.value}${ft_readoutIn.value}${ft_typeIn.value.padStart(2, '0')}${ft_counterIn.value.padStart(3, '0')}`;
+    } else if (kopIn.value == 'Glue') {
+        var encode_div = document.querySelector('#encodeGL');
+        encode_div.classList.remove("hidden");
+        var gl_manuIn = document.getElementById("gl-manuIn-select");
+        var gl_prodIn = document.getElementById("gl-prodIn-select");
+        var gl_counterIn = document.getElementById("gl-counterIn");
+        snOut.value = `20WGL${gl_manuIn.value}${gl_prodIn.value}${gl_counterIn.value.padStart(7, '0')}`;
+    } else if (kopIn.value == 'Hybrid') {
+        var encode_div = document.querySelector('#encodeHY');
+        encode_div.classList.remove("hidden");
+        var hy_manuIn = document.getElementById("hy-manuIn-select");
+        var hy_prodIn = document.getElementById("hy-prodIn-select");
+        var hy_counterIn = document.getElementById("hy-counterIn");
+        snOut.value = `20WHY${hy_manuIn.value}${hy_prodIn.value}${hy_counterIn.value.padStart(7, '0')}`;
+    } else if (kopIn.value == 'Module') {
+        var encode_div = document.querySelector('#encodeMO');
+        encode_div.classList.remove("hidden");
+        var mo_siteIn = document.getElementById("mo-siteIn-select");
+        var mo_prodIn = document.getElementById("mo-prodIn-select");
+        var mo_batchnIn = document.getElementById("mo-batchnIn");
+        var mo_counterIn = document.getElementById("mo-counterIn");
+        snOut.value = `20WMO${mo_siteIn.value}${mo_prodIn.value}${mo_batchnIn.value}${mo_counterIn.value.padStart(6, '0')}`;
+    } else if (kopIn.value == 'Module Flex') {
+        var encode_div = document.querySelector('#encodeMF');
+        encode_div.classList.remove("hidden");
+        var mf_siteIn = document.getElementById("mf-siteIn-select");
+        var mf_prodIn = document.getElementById("mf-prodIn-select");
+        var mf_batchnIn = document.getElementById("mf-batchnIn");
+        var mf_groundingIn = document.getElementById("mf-groundingIn");
+        var mf_counterIn = document.getElementById("mf-counterIn");
+        snOut.value = `20WMF${mf_siteIn.value}${mf_prodIn.value}${mf_batchnIn.value}${mf_groundingIn.value}${mf_counterIn.value.padStart(5, '0')}`;
+    } else if (kopIn.value == 'PEB') {
+        var encode_div = document.querySelector('#encodePE');
+        encode_div.classList.remove("hidden");
+        var pe_manuIn = document.getElementById("pe-manuIn-select");
+        var pe_prodIn = document.getElementById("pe-prodIn-select");
+        var pe_batchnIn = document.getElementById("pe-batchnIn");
+        var pe_groundingIn = document.getElementById("pe-groundingIn");
+        var pe_counterIn = document.getElementById("pe-counterIn");
+        snOut.value = `20WPE${pe_manuIn.value}${pe_prodIn.value}${pe_batchnIn.value}${pe_groundingIn.value}${pe_counterIn.value.padStart(5, '0')}`;
+    } else if (kopIn.value == 'Sensor') {
+        var encode_div = document.querySelector('#encodeS');
+        encode_div.classList.remove("hidden");
+        var s_manuIn = document.getElementById("s-manuIn-select");
+        var s_typeIn = document.getElementById("s-typeIn-select");
+        var s_batchnIn = document.getElementById("s-batchnIn");
+        var s_wafernIn = document.getElementById("s-wafernIn");
+        var s_locInWafIn = document.getElementById("s-locInWafIn");
+        snOut.value = `20WS${s_manuIn.value}${s_typeIn.value}${s_batchnIn.value.padStart(2, '0')}${s_wafernIn.value.padStart(4, '0')}${s_locInWafIn.value.padStart(2, '0')}`;
+    } else if (kopIn.value == 'Slot') {
+        var encode_div = document.querySelector('#encodeSL');
+        encode_div.classList.remove("hidden");
+        var sl_vesselIn = document.getElementById("sl-vesselIn-select");
+        var sl_layerIn = document.getElementById("sl-layerIn-select");
+        var sl_quadIn = document.getElementById("sl-quadIn-select");
+        var sl_rowIn = document.getElementById("sl-rowIn");
+        var sl_modIn = document.getElementById("sl-modIn");
+        snOut.value = `V${sl_vesselIn.value}:L${sl_layerIn.value}:Q${sl_quadIn.value}:R${sl_rowIn.value}:M${sl_modIn.value}`;
+    } else if (kopIn.value == 'Support Unit') {
+        var encode_div = document.querySelector('#encodeSU');
+        encode_div.classList.remove("hidden");
+        var su_siteIn = document.getElementById("su-siteIn-select");
+        var su_prodIn = document.getElementById("su-prodIn-select");
+        var su_sideIn = document.getElementById("su-sideIn-select");
+        var su_ringIn = document.getElementById("su-ringIn-select");
+        var su_typeIn = document.getElementById("su-typeIn");
+        var su_counterIn = document.getElementById("su-counterIn");
+        if (!allowedDUtypes.includes(`${su_sideIn.value}${su_ringIn.value}${su_typeIn.value.padStart(2, '0')}`)) {
+            snOut.value = `The combined side, ring and type are not valid. Please choose one of the 48 types for which a technical drawing exists!`;
+        } else {
+            snOut.value = `20WSU${su_siteIn.value}${su_prodIn.value}${su_sideIn.value}${su_ringIn.value}${su_typeIn.value.padStart(2, '0')}${su_counterIn.value.padStart(3, '0')}`;
+        }
+    } else if (kopIn.value == 'Wafer') {
+        var encode_div = document.querySelector('#encodeS0');
+        encode_div.classList.remove("hidden");
+        var s0_manuIn = document.getElementById("s0-manuIn-select");
+        var s0_prodIn = document.getElementById("s0-prodIn-select");
+        var s0_batchnIn = document.getElementById("s0-batchnIn");
+        var s0_orientIn = document.getElementById("s0-orientIn");
+        var s0_counterIn = document.getElementById("s0-counterIn");
+        snOut.value = `20WS0${s0_manuIn.value}${s0_prodIn.value}${s0_batchnIn.value.padStart(2, '0')}${s0_orientIn.value}${s0_counterIn.value.padStart(4, '0')}`;
     }
 }
