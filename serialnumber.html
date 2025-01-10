@@ -61,8 +61,8 @@
             <option value="Support Unit">Support Unit</option>
             <option value="Wafer">Wafer</option>
         </select>
-        Encoded SN: <output id="snOut">
-        </output>
+        Encoded SN: <output id="snOut">2WFTSM1R76001</output>
+        <button onclick="copySNtoClipboard()">Copy SN to Clipboard</button>
         <br>
         <i>Please fill in or select all required properties.</i>
         <div class="encodeSN hidden" id="encodeAS">
@@ -145,7 +145,7 @@
                 <option value="O">other</option>
             </select>
             <br>
-            <label for="ft-batchnIn">Batch number:</label>
+            <label for="ft-batchnIn">Batch number (1 digit):</label>
             <input id="ft-batchnIn" name="ft-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
             <br>
             <label for="ft-readoutIn">Readout:</label>
@@ -229,7 +229,7 @@
                 <option value="O">other</option>
             </select>
             <br>
-            <label for="mo-batchnIn">Batch number:</label>
+            <label for="mo-batchnIn">Batch number (1 digit):</label>
             <input id="mo-batchnIn" name="mo-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
             <br>
             <label for="mo-counterIn">Counter (6 digits):</label>
@@ -251,7 +251,7 @@
                 <option value="O">other</option>
             </select>
             <br>
-            <label for="mf-batchnIn">Batch number:</label>
+            <label for="mf-batchnIn">Batch number (1 digit):</label>
             <input id="mf-batchnIn" name="mf-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
             <br>
             <label for="mf-groundingIn">Grounding scheme:</label>
@@ -277,7 +277,7 @@
                 <option value="O">other</option>
             </select>
             <br>
-            <label for="pe-batchnIn">Batch number:</label>
+            <label for="pe-batchnIn">Batch number (1 digit):</label>
             <input id="pe-batchnIn" name="pe-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
             <br>
             <label for="pe-groundingIn">Grounding scheme:</label>

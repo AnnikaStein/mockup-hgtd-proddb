@@ -684,3 +684,8 @@ function getSNFromProperties() {
         snOut.value = `20WS0${s0_manuIn.value}${s0_prodIn.value}${s0_batchnIn.value.padStart(2, '0')}${s0_orientIn.value}${s0_counterIn.value.padStart(4, '0')}`;
     }
 }
+
+function copySNtoClipboard() {
+    var textToCopy = document.getElementById("snOut").value;
+    navigator.clipboard.writeText(textToCopy);
+}
