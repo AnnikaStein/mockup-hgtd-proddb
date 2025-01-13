@@ -34,6 +34,7 @@
 
         <label for="snIn">Serial number:</label>
         <input id="snIn" name="snIn-input" oninput="getPropertiesFromSN()" value="Serial number" type="text" />
+        <button onclick="pasteSNfromEncoder()">Paste SN from Encoder below</button>
         <br><br>
         <output id="lengthMessageOut">
         </output>
@@ -61,7 +62,7 @@
             <option value="Support Unit">Support Unit</option>
             <option value="Wafer">Wafer</option>
         </select>
-        Encoded SN: <output id="snOut">2WFTSM1R76001</output>
+        Encoded SN: <output id="snOut">20WFTSM1R76001</output>
         <button onclick="copySNtoClipboard()">Copy SN to Clipboard</button>
         <br>
         <i>Please fill in or select all required properties.</i>

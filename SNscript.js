@@ -689,3 +689,10 @@ function copySNtoClipboard() {
     var textToCopy = document.getElementById("snOut").value;
     navigator.clipboard.writeText(textToCopy);
 }
+
+function pasteSNfromEncoder() {
+    var textToCopy = document.getElementById("snOut").value;
+    var snIn = document.getElementById("snIn");
+    snIn.value = textToCopy;
+    getPropertiesFromSN();
+}
