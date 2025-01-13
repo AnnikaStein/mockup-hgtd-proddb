@@ -11,9 +11,9 @@ function getPropertiesFromSN() {
         messageOut.value = 'Attempting to decode ATLAS SN';
 
         if (snIn.length < 14) {
-            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too few';
+            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too few.';
         } else if (snIn.length > 14) {
-            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too many';
+            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too many.';
         } else {
             lengthMessageOut.value = '';
         }
@@ -49,7 +49,11 @@ function getPropertiesFromSN() {
                     var orient = snIn[9];
                     var wafern = `${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
                     propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Wafer orientation: ${orient}, Wafer number: ${wafern}`
-                    messageOut.value = 'Successfully decoded Wafer SN';
+                    if (lengthMessageOut.value == '') {
+                        messageOut.value = 'Successfully decoded Wafer SN';
+                    } else {
+                        messageOut.value = '';
+                    }
                 } catch {
                     messageOut.value = 'Failed to decode Wafer SN, check if you used this pattern: 20WS0MPBBONNNN';
                 }
@@ -92,7 +96,11 @@ function getPropertiesFromSN() {
                         var locInWafExplainer = 'Unknown Location in wafer attribute!';
                     }
                     propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Sensor type: ${stype} (${stypeExplainer}), Batch number: ${batchn}, Wafer number: ${wafern}, Location in wafer: ${locInWaf} (${locInWafExplainer})`
-                    messageOut.value = 'Successfully decoded Sensor SN';
+                    if (lengthMessageOut.value == '') {
+                        messageOut.value = 'Successfully decoded Sensor SN';
+                    } else {
+                        messageOut.value = '';
+                    }
                 } catch {
                     messageOut.value = 'Failed to decode Sensor SN, check if you used this pattern: 20WSMEBBNNNNXY';
                 }
@@ -191,12 +199,16 @@ function getPropertiesFromSN() {
                 }
 
                 propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Readout: ${readout}, Type: ${fttype} (${fttypeExplainer}), Counter: ${ftcounter}`
-                if (snGeneration == 2) {
-                    messageOut.value = 'Successfully decoded newest Flex Tail SN definition, used from 2025 for (pre-)production as documented in ATL-COM-HGTD-2024-026';
-                } else if (snGeneration == 1) {
-                    messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2025';
+                if (lengthMessageOut.value == '') {
+                    if (snGeneration == 2) {
+                        messageOut.value = 'Successfully decoded newest Flex Tail SN definition, used from 2025 for (pre-)production as documented in ATL-COM-HGTD-2024-026';
+                    } else if (snGeneration == 1) {
+                        messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2025';
+                    } else {
+                        messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator until 24.05.2023';
+                    }
                 } else {
-                    messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator until 24.05.2023';
+                    messageOut.value = '';
                 }
             } catch {
                 messageOut.value = 'Failed to decode FT SN, check if you used this pattern: 20WFTMBPQTTNNN (or an older SN pattern for the demonstrator)';
@@ -238,7 +250,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Assembly site: ${as} (${asExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Counter: ${counter}`
-                messageOut.value = 'Successfully decoded Module SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded Module SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode Module SN, check if you used this pattern: 20WMOKPBNNNNNN';
             }
@@ -278,7 +294,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[7]}${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Counter: ${counter}`
-                messageOut.value = 'Successfully decoded Hybrid SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded Hybrid SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode Hybrid SN, check if you used this pattern: 20WHYMPNNNNNNN';
             }
@@ -312,7 +332,11 @@ function getPropertiesFromSN() {
                 var chipID = `${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Test site: ${tests} (${testsExplainer}), Production: ${prod} (${prodExplainer}), Wafer_ID: ${waferID}, Wafer_Nr: ${waferNr}, Chip_ID: ${chipID}`
-                messageOut.value = 'Successfully decoded ASIC SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded ASIC SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode ASIC SN, check if you used this pattern: 20WASVPDDDDCCC';
             }
@@ -344,7 +368,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Grounding scheme: ${grounding}, Counter: ${counter}`
-                messageOut.value = 'Successfully decoded Module Flex SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded Module Flex SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode Module Flex SN, check if you used this pattern: 20WMFMPBJNNNNN';
             }
@@ -393,7 +421,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Side of HGTD disk: ${side} (${sideExplainer}), Ring: ${ring} (${ringExplainer}), Type: ${type}, Counter: ${counter}`
-                messageOut.value = 'Successfully decoded Support Unit SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded Support Unit SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode Support Unit SN, check if you used this pattern: 20WSUMPZRTTNNN';
             }
@@ -452,7 +484,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Sites that install modules on SU: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Side of HGTD disk: ${side} (${sideExplainer}), Ring: ${ring} (${ringExplainer}), Type: ${type}, Counter: ${counter}`
-                messageOut.value = 'Successfully decoded Detector Unit SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded Detector Unit SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode Detector Unit SN, check if you used this pattern: 20WDUKPZRTTNNN';
             }
@@ -492,7 +528,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[7]}${snIn[8]}${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Counter: ${counter}`
-                messageOut.value = 'Successfully decoded Glue SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded Glue SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode Glue SN, check if you used this pattern: 20WGLMPNNNNNNN';
             }
@@ -526,7 +566,11 @@ function getPropertiesFromSN() {
                 var counter = `${snIn[9]}${snIn[10]}${snIn[11]}${snIn[12]}${snIn[13]}`;
 
                 propertiesOut.value = `Manufacturer / Vendor: ${manu} (${manuExplainer}), Production: ${prod} (${prodExplainer}), Batch number: ${batchn}, Grounding scheme: ${grounding}, Counter: ${counter}`
-                messageOut.value = 'Successfully decoded PEB SN';
+                if (lengthMessageOut.value == '') {
+                    messageOut.value = 'Successfully decoded PEB SN';
+                } else {
+                    messageOut.value = '';
+                }
             } catch {
                 messageOut.value = 'Failed to decode PEB SN, check if you used this pattern: 20WPEMPBJNNNNN';
             }
@@ -537,9 +581,9 @@ function getPropertiesFromSN() {
         messageOut.value = 'Attempting to decode Slot SN';
         //if (snIn.includes('V') && snIn.includes('L')
         if (snIn.length < 14) {
-            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too few';
-        } else if (snIn.length > 14) {
-            lengthMessageOut.value = 'ATLAS SN must have 14 digits. Found too many';
+            lengthMessageOut.value = 'Slot SN must have at least 14 digits. Found too few.';
+        } else if (snIn.length > 16) {
+            lengthMessageOut.value = 'Slot SN must have at most 16 digits. Found too many.';
         } else {
             lengthMessageOut.value = '';
         }
@@ -550,7 +594,11 @@ function getPropertiesFromSN() {
             var row = snIn.split('R').pop().split(':')[0];
             var mod = snIn.split('M')[1];
             propertiesOut.value = `Vessel: ${vessel}, Layer: ${layer}, Quadrant: ${quadrant}, Row: ${row}, Module: ${mod}`
-            messageOut.value = 'Successfully decoded Slot SN';
+            if (lengthMessageOut.value == '') {
+                messageOut.value = 'Successfully decoded Slot SN';
+            } else {
+                messageOut.value = '';
+            }
         } catch {
             messageOut.value = 'Failed to decode Slot SN, check if you used this pattern: Vx:Lx:Qx:Rx:Mx';
         }
