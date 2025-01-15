@@ -83,10 +83,10 @@
             </select>
             <br>
             <label for="as-wafernIn">Wafer_Nr (4 digits):</label>
-            <input id="as-wafernIn" name="as-wafernIn-input" oninput="getSNFromProperties()" value="0001" type="text" />
+            <input id="as-wafernIn" name="as-wafernIn-input" oninput="getSNFromProperties()" value="0001" maxlength="4" type="text" />
             <br>
             <label for="as-chipidIn">Chip_ID (3 digits):</label>
-            <input id="as-chipidIn" name="as-chipidIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <input id="as-chipidIn" name="as-chipidIn-input" oninput="getSNFromProperties()" value="001" maxlength="3" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeDU">
@@ -123,10 +123,10 @@
             </select>
             <br>
             <label for="du-typeIn">Type of DU (2 digits):</label>
-            <input id="du-typeIn" name="du-typeIn-input" oninput="getSNFromProperties()" value="10" type="text" />
+            <input id="du-typeIn" name="du-typeIn-input" oninput="getSNFromProperties()" value="10" maxlength="2" type="text" />
             <br>
             <label for="du-counterIn">Counter (3 digits):</label>
-            <input id="du-counterIn" name="du-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <input id="du-counterIn" name="du-counterIn-input" oninput="getSNFromProperties()" value="001" maxlength="3" type="text" />
             <br>
         </div>
         <div class="encodeSN" id="encodeFT">
@@ -147,7 +147,7 @@
             </select>
             <br>
             <label for="ft-batchnIn">Batch number (1 digit):</label>
-            <input id="ft-batchnIn" name="ft-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <input id="ft-batchnIn" name="ft-batchnIn-input" oninput="getSNFromProperties()" value="1" maxlength="1" type="text" />
             <br>
             <label for="ft-readoutIn">Readout:</label>
             <select name="ft-readoutIn" id="ft-readoutIn-select" onchange="getSNFromProperties()">
@@ -156,10 +156,10 @@
             </select>
             <br>
             <label for="ft-typeIn">Type (2 digits):</label>
-            <input id="ft-typeIn" name="ft-typeIn-input" oninput="getSNFromProperties()" value="76" type="text" />
+            <input id="ft-typeIn" name="ft-typeIn-input" oninput="getSNFromProperties()" value="76" maxlength="2" type="text" />
             <br>
             <label for="ft-counterIn">Counter (3 digits):</label>
-            <input id="ft-counterIn" name="ft-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <input id="ft-counterIn" name="ft-counterIn-input" oninput="getSNFromProperties()" value="001" maxlength="3" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeGL">
@@ -183,7 +183,7 @@
             </select>
             <br>
             <label for="gl-counterIn">Counter (7 digits):</label>
-            <input id="gl-counterIn" name="gl-counterIn-input" oninput="getSNFromProperties()" value="0000001" type="text" />
+            <input id="gl-counterIn" name="gl-counterIn-input" oninput="getSNFromProperties()" value="0000001" maxlength="7" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeHY">
@@ -207,7 +207,7 @@
             </select>
             <br>
             <label for="hy-counterIn">Counter (7 digits):</label>
-            <input id="hy-counterIn" name="hy-counterIn-input" oninput="getSNFromProperties()" value="0000001" type="text" />
+            <input id="hy-counterIn" name="hy-counterIn-input" oninput="getSNFromProperties()" value="0000001" maxlength="7" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeMO">
@@ -231,10 +231,10 @@
             </select>
             <br>
             <label for="mo-batchnIn">Batch number (1 digit):</label>
-            <input id="mo-batchnIn" name="mo-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <input id="mo-batchnIn" name="mo-batchnIn-input" oninput="getSNFromProperties()" value="1" maxlength="1" type="text" />
             <br>
             <label for="mo-counterIn">Counter (6 digits):</label>
-            <input id="mo-counterIn" name="mo-counterIn-input" oninput="getSNFromProperties()" value="000001" type="text" />
+            <input id="mo-counterIn" name="mo-counterIn-input" oninput="getSNFromProperties()" value="000001" maxlength="6" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeMF">
@@ -253,13 +253,13 @@
             </select>
             <br>
             <label for="mf-batchnIn">Batch number (1 digit):</label>
-            <input id="mf-batchnIn" name="mf-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <input id="mf-batchnIn" name="mf-batchnIn-input" oninput="getSNFromProperties()" value="1" maxlength="1" type="text" />
             <br>
-            <label for="mf-groundingIn">Grounding scheme:</label>
-            <input id="mf-groundingIn" name="mf-groundingIn-input" oninput="getSNFromProperties()" value="A" type="text" />
+            <label for="mf-groundingIn">Grounding scheme (1 digit):</label>
+            <input id="mf-groundingIn" name="mf-groundingIn-input" oninput="getSNFromProperties()" value="A" maxlength="1" type="text" />
             <br>
             <label for="mf-counterIn">Counter (5 digits):</label>
-            <input id="mf-counterIn" name="mf-counterIn-input" oninput="getSNFromProperties()" value="00001" type="text" />
+            <input id="mf-counterIn" name="mf-counterIn-input" oninput="getSNFromProperties()" value="00001" maxlength="5" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodePE">
@@ -279,13 +279,13 @@
             </select>
             <br>
             <label for="pe-batchnIn">Batch number (1 digit):</label>
-            <input id="pe-batchnIn" name="pe-batchnIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <input id="pe-batchnIn" name="pe-batchnIn-input" oninput="getSNFromProperties()" value="1" maxlength="1" type="text" />
             <br>
-            <label for="pe-groundingIn">Grounding scheme:</label>
-            <input id="pe-groundingIn" name="pe-groundingIn-input" oninput="getSNFromProperties()" value="A" type="text" />
+            <label for="pe-groundingIn">Grounding scheme (1 digit):</label>
+            <input id="pe-groundingIn" name="pe-groundingIn-input" oninput="getSNFromProperties()" value="A" maxlength="1" type="text" />
             <br>
             <label for="pe-counterIn">Counter (5 digits):</label>
-            <input id="pe-counterIn" name="pe-counterIn-input" oninput="getSNFromProperties()" value="00001" type="text" />
+            <input id="pe-counterIn" name="pe-counterIn-input" oninput="getSNFromProperties()" value="00001" maxlength="5" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeS">
@@ -306,13 +306,13 @@
             </select>
             <br>
             <label for="s-batchnIn">Batch number (2 digits):</label>
-            <input id="s-batchnIn" name="s-batchnIn-input" oninput="getSNFromProperties()" value="01" type="text" />
+            <input id="s-batchnIn" name="s-batchnIn-input" oninput="getSNFromProperties()" value="01" maxlength="2" type="text" />
             <br>
             <label for="s-wafernIn">Wafer number (4 digit):</label>
-            <input id="s-wafernIn" name="s-wafernIn-input" oninput="getSNFromProperties()" value="0001" type="text" />
+            <input id="s-wafernIn" name="s-wafernIn-input" oninput="getSNFromProperties()" value="0001" maxlength="4" type="text" />
             <br>
             <label for="s-locInWafIn">Location in wafer (2 digits):</label>
-            <input id="s-locInWafIn" name="s-locInWafIn-input" oninput="getSNFromProperties()" value="01" type="text" />
+            <input id="s-locInWafIn" name="s-locInWafIn-input" oninput="getSNFromProperties()" value="01" maxlength="2" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeSL">
@@ -341,10 +341,10 @@
             </select>
             <br>
             <label for="sl-rowIn">Row:</label>
-            <input id="sl-rowIn" name="sl-rowIn-input" oninput="getSNFromProperties()" value="21" type="text" />
+            <input id="sl-rowIn" name="sl-rowIn-input" oninput="getSNFromProperties()" value="21" maxlength="2" type="text" />
             <br>
             <label for="sl-modIn">Module:</label>
-            <input id="sl-modIn" name="sl-modIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <input id="sl-modIn" name="sl-modIn-input" oninput="getSNFromProperties()" value="1" maxlength="2" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeSU">
@@ -381,10 +381,10 @@
             </select>
             <br>
             <label for="su-typeIn">Type of SU (2 digits):</label>
-            <input id="su-typeIn" name="su-typeIn-input" oninput="getSNFromProperties()" value="10" type="text" />
+            <input id="su-typeIn" name="su-typeIn-input" oninput="getSNFromProperties()" value="10" maxlength="2" type="text" />
             <br>
             <label for="su-counterIn">Counter (3 digits):</label>
-            <input id="su-counterIn" name="su-counterIn-input" oninput="getSNFromProperties()" value="001" type="text" />
+            <input id="su-counterIn" name="su-counterIn-input" oninput="getSNFromProperties()" value="001" maxlength="3" type="text" />
             <br>
         </div>
         <div class="encodeSN hidden" id="encodeS0">
@@ -401,13 +401,13 @@
             </select>
             <br>
             <label for="s0-batchnIn">Batch number (2 digits):</label>
-            <input id="s0-batchnIn" name="s0-batchnIn-input" oninput="getSNFromProperties()" value="00" type="text" />
+            <input id="s0-batchnIn" name="s0-batchnIn-input" oninput="getSNFromProperties()" value="00" maxlength="2" type="text" />
             <br>
             <label for="s0-orientIn">Wafer orientation (1 digit):</label>
-            <input id="s0-orientIn" name="s0-orientIn-input" oninput="getSNFromProperties()" value="1" type="text" />
+            <input id="s0-orientIn" name="s0-orientIn-input" oninput="getSNFromProperties()" value="1" maxlength="1" type="text" />
             <br>
             <label for="s0-counterIn">Counter (4 digits):</label>
-            <input id="s0-counterIn" name="s0-counterIn-input" oninput="getSNFromProperties()" value="0001" type="text" />
+            <input id="s0-counterIn" name="s0-counterIn-input" oninput="getSNFromProperties()" value="0001" maxlength="4" type="text" />
             <br>
         </div>
         <br><br>
