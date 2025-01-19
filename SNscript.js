@@ -109,7 +109,7 @@ function getPropertiesFromSN() {
             messageOut.value = 'Attempting to decode Flex Tail SN';
             try {
                 var manu = snIn[5];
-                var snGeneration = 2; // 0: pre 24052023, 1: post 24052023 but pre 2025, 2 (default): from 2025 for (pre-)production
+                var snGeneration = 2; // 0: pre 24052023, 1: post 24052023 but pre 2025, 1.2: new demonstrator order 2024/2025, 2 (default): from 2025 for (pre-)production
                 if (manu == 'G') {
                     var manuExplainer = 'Germany';
                 } else if (manu == 'C') {
@@ -132,7 +132,11 @@ function getPropertiesFromSN() {
                 var digitEight = snIn[7];
                 if ((digitEight == 'D') && (parseInt(digitSeven) <= 2)) {
                     snGeneration = 1;
-                    messageOut.value = 'Recognize old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2025';
+                    messageOut.value = 'Recognize old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2024';
+                } else if ((digitEight == '2') && (digitSeven == '1')) {
+                    snGeneration = 1.2;
+                    messageOut.value = 'Recognize old Flex Tail SN definition, used for new demonstrator order 2024/2025';
+                    var prodExplainer = 'demonstrator';
                 } else {
                     if (snGeneration == 2) {
                         messageOut.value = 'Recognize newest Flex Tail SN definition, used from 2025 for (pre-)production as documented in ATL-COM-HGTD-2024-026';
@@ -168,6 +172,10 @@ function getPropertiesFromSN() {
                         var prodExplainer = 'Unknown Production attribute!';
                     }
                     var batchn = digitEight;
+                } else if (snGeneration == 1.2) {
+                    var prod = digitSeven;
+                    // prodExplainer already known above
+                    var batchn = digitEight;
                 } else if (snGeneration == 1) {
                     var prod = digitEight;
                     if (prod == 'M') {
@@ -202,8 +210,10 @@ function getPropertiesFromSN() {
                 if (lengthMessageOut.value == '') {
                     if (snGeneration == 2) {
                         messageOut.value = 'Successfully decoded newest Flex Tail SN definition, used from 2025 for (pre-)production as documented in ATL-COM-HGTD-2024-026';
+                    } else if (snGeneration == 1.2) {
+                        messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for new demonstrator order 2024/2025';
                     } else if (snGeneration == 1) {
-                        messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2025';
+                        messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator from 24.05.2023 until 2024';
                     } else {
                         messageOut.value = 'Successfully decoded old Flex Tail SN definition, used for demonstrator until 24.05.2023';
                     }
