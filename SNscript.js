@@ -227,7 +227,7 @@ function getPropertiesFromSN() {
             messageOut.value = 'Attempting to decode Module SN';
             try {
                 var as = snIn[5];
-                if ((as == 'K') || (as == '1')) {
+                if ((as == 'F') || (as == '1')) {
                     var asExplainer = 'IFAE';
                 } else if ((as == 'H') || (as == '2')) {
                     var asExplainer = 'IHEP';
@@ -272,7 +272,7 @@ function getPropertiesFromSN() {
             messageOut.value = 'Attempting to decode Hybrid SN';
             try {
                 var manu = snIn[5];
-                if ((manu == 'K') || (manu == '1')) {
+                if ((manu == 'F') || (manu == '1')) {
                     var manuExplainer = 'IFAE';
                 } else if ((manu == 'H') || (manu == '2')) {
                     var manuExplainer = 'IHEP';
@@ -443,12 +443,12 @@ function getPropertiesFromSN() {
             messageOut.value = 'Attempting to decode Detector Unit SN';
             try {
                 var manu = snIn[5];
-                if ((manu == 'K') || (manu == '1')) {
+                if ((manu == 'F') || (manu == '1')) {
                     var manuExplainer = 'IFAE';
                 } else if ((manu == 'H') || (manu == '2')) {
                     var manuExplainer = 'IHEP';
-                } else if ((manu == 'J') || (manu == '3')) {
-                    var manuExplainer = 'IJCLab';
+                } else if ((manu == 'P') || (manu == '3')) {
+                    var manuExplainer = 'LPNHE';
                 } else if ((manu == 'M') || (manu == '4')) {
                     var manuExplainer = 'Mainz';
                 } else if ((manu == 'A') || (manu == '5')) {
@@ -506,7 +506,7 @@ function getPropertiesFromSN() {
             messageOut.value = 'Attempting to decode Glue SN';
             try {
                 var manu = snIn[5];
-                if ((manu == 'K') || (manu == '1')) {
+                if ((manu == 'F') || (manu == '1')) {
                     var manuExplainer = 'IFAE';
                 } else if ((manu == 'H') || (manu == '2')) {
                     var manuExplainer = 'IHEP';
