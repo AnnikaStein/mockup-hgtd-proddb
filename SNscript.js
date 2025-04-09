@@ -390,10 +390,10 @@ function getPropertiesFromSN() {
             messageOut.value = 'Attempting to decode Support Unit SN';
             try {
                 var manu = snIn[5];
-                if (manu == 'H') {
-                    var manuExplainer = 'IHEP';
+                if (manu == 'C') {
+                    var manuExplainer = 'China';
                 } else {
-                    var manuExplainer = 'Unknown Assembly site attribute!';
+                    var manuExplainer = 'Unknown Vendor attribute!';
                 }
                 var prod = snIn[6];
                 if ((prod == 'M') || (prod == '0')) {
